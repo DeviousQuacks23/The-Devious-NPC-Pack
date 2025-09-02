@@ -291,9 +291,9 @@ function mechakoopa.onTickEndMechakoopa(v)
 
     if config.isFlyingMechakoopa then -- Flying mechakoopa logic
 	if data.substate == STATE_PATROL then
-	    data.flyingTurnTimer = data.flyingTurnTimer + v.direction
-	    if math.abs(data.flyingTurnTimer) >= config.patrolTime then
-		if not v.dontMove then
+	    data.flyingTurnTimer = data.flyingTurnTimer + 1
+	    if data.flyingTurnTimer % config.patrolTime == 0 then
+		if not v.dontMove and data.state == STATE_WALK then
 		    v.direction = -v.direction
 		end
 	    end
