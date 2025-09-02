@@ -288,6 +288,115 @@ function mechakoopa.onTickEndMechakoopa(v)
 	    end
 	end
     end
+
+    if config.isFlyingMechakoopa then -- Flying mechakoopa logic
+	if data.substate == STATE_PATROL then
+	    data.flyingTurnTimer = data.flyingTurnTimer + v.direction
+	    if math.abs(data.flyingTurnTimer) >= config.patrolTime then
+		if not v.dontMove then
+		    v.direction = -v.direction
+		end
+	    end
+
+	    v.speedX = config.wanderSpeed * v.direction
+	    if math.abs(v.speedY) >= config.flyingSpeed then
+		v.speedY = v.speedY / 16
+	    else
+		v.speedY = 0
+	    end
+
+	    if n and playerDistance < config.chaseDistance then
+		data.substate = STATE_DECIDE
+		data.decideTimer = 0
+
+		v.direction = math.sign(playerDistanceX)
+            end
+	elseif data.substate == STATE_DECIDE then
+            data.decideTimer = data.decideTimer + 1
+	    if n then 
+		v.direction = math.sign(playerDistanceX) 
+	    end
+            if data.decideTimer >= config.decideTime then
+            	data.substate = STATE_CHASE
+		data.chaseDecision = data.playerDistancePriority
+                data.decideTimer = 0
+		data.chaseTimer = 0
+            end
+
+	    if math.abs(v.speedY) >= config.flyingSpeed then
+		v.speedY = v.speedY / 16
+	    else
+		v.speedY = 0
+	    end
+	    if math.abs(v.speedX) >= config.flyingSpeed then
+		v.speedX = v.speedX / 16
+	    else
+		v.speedX = 0
+	    end
+	elseif data.substate == STATE_CHASE then
+	    data.chaseTimer = data.chaseTimer + 1
+	    if data.chaseDecision == 0 then
+		v.speedX = config.flyingSpeed*v.direction
+		if math.abs(v.speedY) >= config.flyingSpeed then
+		    v.speedY = v.speedY / 16
+		else
+		    v.speedY = 0
+		end
+	    else
+		if data.chaseDecision == 1 then
+		    v.speedY = config.flyingSpeed
+		else
+		    v.speedY = -config.flyingSpeed
+		end
+		if math.abs(v.speedX) >= config.flyingSpeed then
+		    v.speedX = v.speedX / 16
+		else
+		    v.speedX = 0
+		end
+	    end
+	    if data.chaseTimer >= config.checkTime then
+		local chaseConcise = 0
+		if data.playerDistanceCheck > 0 then
+		    chaseConcise = 0 --Chase Horizontal
+		else
+		    if playerDistanceY > 0 then
+			chaseConcise = 1 --Chase Down
+		    else
+			chaseConcise = 2 --Chase Up
+		    end
+		end
+		if n and ((playerDistance >= config.chaseDistance) or (chaseConcise ~= data.chaseDecision)) then
+		    data.substate = STATE_DECIDE
+		    data.decideTimer = 0
+		    data.chaseTimer = 0
+
+		    v.direction = math.sign(playerDistanceX)
+		end
+	    end
+	    if (data.chaseDecision == 0 
+	    and ((v.direction == -1 and v.collidesBlockLeft) 
+	    or (v.direction == 1 and v.collidesBlockRight)) 
+	    or (data.chaseDecision == 1 and v.collidesBlockBottom) 
+	    or (data.chaseDecision == 2 and v.collidesBlockUp)) then
+		data.substate = STATE_DECIDE
+		data.decideTimer = 0
+		data.chaseTimer = 0
+
+		if n then 
+		    v.direction = math.sign(playerDistanceX) 
+		end
+	    end
+	end
+
+	-- Floating code
+	v.speedY = v.speedY + data.verTimer / 30
+	data.verTimer = data.verTimer + data.verDir
+	if data.verTimer >= 16 and data.verDir == 1 then
+		data.verDir = data.verDir * -1
+	elseif data.verTimer <= -16 and data.verDir == - 1 then
+		data.verDir = data.verDir * -1
+	end
+    end
     
     if mechakoopa.typeMap[v.id] == mechakoopa.TYPE_KNOCKED then
         data.timer = data.timer + 1
@@ -472,115 +581,6 @@ function mechakoopa.onTickEndMechakoopa(v)
         end
 
         v.speedX = 0
-    end
-
-    if config.isFlyingMechakoopa then -- Flying mechakoopa logic
-	if data.substate == STATE_PATROL then
-	    data.flyingTurnTimer = data.flyingTurnTimer + v.direction
-	    if math.abs(data.flyingTurnTimer) >= config.patrolTime then
-		if not v.dontMove then
-		    v.direction = -v.direction
-		end
-	    end
-
-	    v.speedX = config.wanderSpeed * v.direction
-	    if math.abs(v.speedY) >= config.flyingSpeed then
-		v.speedY = v.speedY / 16
-	    else
-		v.speedY = 0
-	    end
-
-	    if n and playerDistance < config.chaseDistance then
-		data.substate = STATE_DECIDE
-		data.decideTimer = 0
-
-		v.direction = math.sign(playerDistanceX)
-            end
-	elseif data.substate == STATE_DECIDE then
-            data.decideTimer = data.decideTimer + 1
-	    if n then 
-		v.direction = math.sign(playerDistanceX) 
-	    end
-            if data.decideTimer >= config.decideTime then
-            	data.substate = STATE_CHASE
-		data.chaseDecision = data.playerDistancePriority
-                data.decideTimer = 0
-		data.chaseTimer = 0
-            end
-
-	    if math.abs(v.speedY) >= config.flyingSpeed then
-		v.speedY = v.speedY / 16
-	    else
-		v.speedY = 0
-	    end
-	    if math.abs(v.speedX) >= config.flyingSpeed then
-		v.speedX = v.speedX / 16
-	    else
-		v.speedX = 0
-	    end
-	elseif data.substate == STATE_CHASE then
-	    data.chaseTimer = data.chaseTimer + 1
-	    if data.chaseDecision == 0 then
-		v.speedX = config.flyingSpeed*v.direction
-		if math.abs(v.speedY) >= config.flyingSpeed then
-		    v.speedY = v.speedY / 16
-		else
-		    v.speedY = 0
-		end
-	    else
-		if data.chaseDecision == 1 then
-		    v.speedY = config.flyingSpeed
-		else
-		    v.speedY = -config.flyingSpeed
-		end
-		if math.abs(v.speedX) >= config.flyingSpeed then
-		    v.speedX = v.speedX / 16
-		else
-		    v.speedX = 0
-		end
-	    end
-	    if data.chaseTimer >= config.checkTime then
-		local chaseConcise = 0
-		if data.playerDistanceCheck > 0 then
-		    chaseConcise = 0 --Chase Horizontal
-		else
-		    if playerDistanceY > 0 then
-			chaseConcise = 1 --Chase Down
-		    else
-			chaseConcise = 2 --Chase Up
-		    end
-		end
-		if n and ((playerDistance >= config.chaseDistance) or (chaseConcise ~= data.chaseDecision)) then
-		    data.substate = STATE_DECIDE
-		    data.decideTimer = 0
-		    data.chaseTimer = 0
-
-		    v.direction = math.sign(playerDistanceX)
-		end
-	    end
-	    if (data.chaseDecision == 0 
-	    and ((v.direction == -1 and v.collidesBlockLeft) 
-	    or (v.direction == 1 and v.collidesBlockRight)) 
-	    or (data.chaseDecision == 1 and v.collidesBlockBottom) 
-	    or (data.chaseDecision == 2 and v.collidesBlockUp)) then
-		data.substate = STATE_DECIDE
-		data.decideTimer = 0
-		data.chaseTimer = 0
-
-		if n then 
-		    v.direction = math.sign(playerDistanceX) 
-		end
-	    end
-	end
-
-	-- Floating code
-	v.speedY = v.speedY + data.verTimer / 30
-	data.verTimer = data.verTimer + data.verDir
-	if data.verTimer >= 16 and data.verDir == 1 then
-		data.verDir = data.verDir * -1
-	elseif data.verTimer <= -16 and data.verDir == - 1 then
-		data.verDir = data.verDir * -1
-	end
     end
 
     v.animationFrame = getAnimationFrame(v)
