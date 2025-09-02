@@ -1,0 +1,5 @@
+gfxheight = 138
+gfxoffsety = 21
+frames = 4
+coinID = 33
+rotateSprite = false

@@ -1,0 +1,14 @@
+{
+	"style" : "groupbox",
+	"title" : "Ghost Block Settings",
+	"layout": [
+
+		{
+			"control": "combobox",
+			"name": "look",
+			"title": "Appearance",
+			"elements": ["Ghost Block", "Ghost Vase"],
+			"value-default": 0
+		}
+		]
+}

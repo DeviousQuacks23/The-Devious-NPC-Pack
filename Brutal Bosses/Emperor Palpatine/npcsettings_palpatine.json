@@ -1,0 +1,14 @@
+{
+	"style" : "groupbox",
+	"title" : "Emperor Palpatine Settings",
+	"layout": [
+		{
+			"control": "lineEdit",
+			"name": "stunnedEvent",
+			"title": "Stunned Event Name",
+			"tooltip": "The name of the event triggered when the NPC is stunned.",
+			"value-default": ""
+		}
+	]
+}
+

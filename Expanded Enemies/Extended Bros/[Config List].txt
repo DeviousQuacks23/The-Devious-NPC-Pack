@@ -1,0 +1,52 @@
+holdoffsetx, holdoffsety - The offset of the thrown NPC when held.
+throwoffsetx, throwoffsety - The offset of the thrown NPC when thrown.
+
+walkframes - The time spent walking before changing directions.
+jumpframes - The delay between jumping.
+jumptimerange - An additional number of frames that can be added to the jump delay.
+
+jumpspeed - Jump height of the bro.
+secondjumpspeed - A secondary jump height for the bro. Used by Fire Bros.
+secondjumpchance - The chance that the bro will use the secondary jump height.
+
+throwspeedx, throwspeedy - The thrown speed of the NPC.
+
+initialtimer - The initial value for the throwing cooldown, to accelerate the first throw.
+initialtimerrange - An additional number of frames that can be added to the initial throwing cooldown.
+
+waitframeslow - The lower bound for the throwing cooldown.
+waitframeshigh - The upper bound for the throwing cooldown.
+holdframes - The number of ticks for which the NPC is held before being thrown.
+npcheldfirerate - The multiplier for the shoot time when the bro is held by a player.
+
+throwid - The ID of the projectile thrown.
+throwidheld - The ID of the projectile thrown when held by the player. To disable, set the config to 0. Used by Fire Bros.
+doheldharm - If enabled, the thrown NPC will automatically be friendly and kill NPCs when the bro is held by a player.
+syncheldspeed - If enabled, the thrown NPC's speed with sync with the player's speed, when held.
+
+volley - How many projectiles are thrown. Used by Fire Bros. 
+volleyframes - The delay between each projectile in a single volley.
+
+quake - If enabled, the bro will cause an earthquake when landing. Used by Sledge Bros.
+stalltime - The time that the bro will stay in the air before falling down.
+stunframes - How long players are stunned for when a bro causes an earthquake.
+quakeintensity - The earthquake intensity of a landing bro.
+
+brospeed - The movement speed of the bro.
+movewhenjumping - If enabled, the bro will move when jumping midair. Otherwise, the bro will stay still.
+movewhenshooting - If enabled, the bro will move when shooting. Otherwise, the bro will stay still.
+
+chaseplayer - If enabled, the bro will chase the closest player instead of patrolling its area.
+followplayer - If enabled, the bro will always face the closest player. Otherwise, it will always face the direction it was placed in.
+
+animwalkframes - How many frames the bro will use when walking.
+animjumpframes - How many frames the bro will use when jumping. To disable, set the config to 0.
+animholdframes - How many frames the bro will use when holding its projectile.
+animshootframes - How many frames the bro will use when shooting. To disable, set the config to 0.
+shootframeduration - The duration of the bro's shooting animation.
+
+drawheldnpc - If enabled, the bro will visually hold its projectile before throwing it.
+drawnpcinfront - If enabled, the bro will render the projectile infront of itself, otherwise the projectile will be rendered from behind.
+
+jumpSFX, quakeSFX, holdSFX, throwSFX - SFX configs. Can be false for none, a number for a vanilla sound, or a sound effect object/string for a custom sound.
+onThrowFunction - A custom function that can be used to modify the bro when it is throwing. Look at the Sniper Bro for an example.

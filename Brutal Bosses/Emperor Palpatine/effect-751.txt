@@ -1,0 +1,10 @@
+[1]
+import = AI_ARC
+frames = 1
+framestyle = 0
+xAlign = MID
+yAlign = MID
+rotation = 8
+speedX = 5
+speedY = -16
+gravity = 0.25

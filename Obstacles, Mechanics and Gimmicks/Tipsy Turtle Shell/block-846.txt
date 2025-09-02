@@ -1,0 +1,5 @@
+[1]
+image = block-846.png
+frames = 1
+semisolid = true
+floorslope = -1

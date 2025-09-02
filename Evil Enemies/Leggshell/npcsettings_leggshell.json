@@ -1,0 +1,15 @@
+{
+	"style" : "groupbox",
+	"title" : "Leggshell Extra-Settings",	
+	"layout": [
+		{
+			"control": "itemSelect",
+			"name": "storedNPC",
+			"title": "Dropped NPC",
+			"type": "npc",
+			"tooltip": "What NPC should be dropped by the Leggshell?",
+			"value-default": 0
+		}
+	]
+	
+}

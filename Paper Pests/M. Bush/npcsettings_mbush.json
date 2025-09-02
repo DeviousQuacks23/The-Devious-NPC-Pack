@@ -1,0 +1,14 @@
+{
+	"style" : "groupbox",
+	"title" : "M. Bush Settings",
+	"layout": [
+		{
+			"control": "checkbox",
+			"name": "dontStartHidden",
+			"title": "Don't Spawn Hidden",
+			"tooltip": "If enabled, the NPC will already be out of hiding.",
+			"text-visible": false,
+			"value-default": false
+		}
+	]
+}

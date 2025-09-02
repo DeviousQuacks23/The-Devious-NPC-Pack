@@ -1,0 +1,5 @@
+[first]
+import=AI_SINGLE
+frames=1
+lifetime=6
+variants=4 

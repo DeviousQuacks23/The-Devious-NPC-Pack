@@ -1,0 +1,13 @@
+{
+	"style" : "groupbox",
+	"title" : "Toad Settings",
+	"layout": [
+		{
+			"control": "combobox",
+			"name": "color",
+			"title": "What colour is the Toad?",
+			"elements": ["Red", "Blue", "Green", "Yellow", "Purple"],
+			"value-default": 0
+		}
+	]
+}

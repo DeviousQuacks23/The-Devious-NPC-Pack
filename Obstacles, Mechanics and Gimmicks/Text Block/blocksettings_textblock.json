@@ -1,0 +1,147 @@
+{
+	"style" : "groupbox",
+	"title" : "Text Block Settings",
+	"layout": [
+		{
+			"control": "lineEdit",
+			"name": "theActualText",
+			"title": "Text",
+			"tooltip": "The text that will be shown.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "fontSetting",
+			"title": "Font",
+			"tooltip": "The font that the text will use.",
+			"value-default": ""
+		},
+		{
+			"control": "pointBox",
+			"name": "pivotation",
+			"title": "Pivot",
+			"tooltip": "The pivot of the text.",
+			"type": "double",
+			"value-min": {"x":0, "y":0},
+			"value-max": {"x":1, "y":1},
+			"value-default" : {"x":0.5, "y":0.5}
+		},
+		{
+			"control": "spinBox",
+			"name": "maximumWide",
+			"title": "Maximum Width",
+			"tooltip": "The maximum width of the text, before going onto a new line.",
+			"type": "int",
+			"value-min": 1,
+			"value-max": 10000,
+			"value-default": 256
+		},
+		{
+			"control": "pointBox",
+			"name": "textingSize",
+			"title": "Size",
+			"tooltip": "The size of the text.",
+			"type": "double",
+			"value-min": {"x":0, "y":0},
+			"value-max": {"x":8, "y":8},
+			"value-default" : {"x":1, "y":1}
+		},
+		{
+			"control": "spinBox",
+			"name": "renderPrio",
+			"title": "Priority",
+			"tooltip": "The render priority of the text.",
+			"type": "int",
+			"value-min": -100,
+			"value-max": 10,
+			"value-default": -64
+		},
+		{
+			"control": "color",
+			"name": "colorfulTexting",
+			"title": "Color",
+			"tooltip": "The color of the text.",
+			"value-default": "#FFFFFF"
+		},
+		{
+			"control": "spinBox",
+			"name": "colorfulOpacity",
+			"title": "Opacity",
+			"tooltip": "The opacity of the text.",
+			"type": "double",
+			"value-min": 0,
+			"value-max": 1,
+			"value-default": 1,
+			"single-step": 0.1
+		},
+		{
+			"control": "checkbox",
+			"name": "iWantOutlines",
+			"title": "Outlines?",
+			"value-default": false
+		},
+		{
+			"control": "spinBox",
+			"name": "outlineSize",
+			"title": "Outline Size",
+			"tooltip": "The size of the text outline.",
+			"type": "int",
+			"value-min": 1,
+			"value-max": 10,
+			"value-default": 1
+		},
+		{
+			"control": "color",
+			"name": "colorOutline",
+			"title": "Outline Color",
+			"tooltip": "The color of the text outline.",
+			"value-default": "#000000"
+		},
+		{
+			"control": "spinBox",
+			"name": "opacityOutline",
+			"title": "Outline Opacity",
+			"tooltip": "The opacity of the text outline.",
+			"type": "double",
+			"value-min": 0,
+			"value-max": 1,
+			"value-default": 1,
+			"single-step": 0.1
+		},
+		{
+			"control": "checkbox",
+			"name": "iWantShadows",
+			"title": "Shadows?",
+			"value-default": false
+		},
+		{
+			"control": "pointBox",
+			"name": "shadowDist",
+			"title": "Shadow Distance",
+			"tooltip": "How far the shadow is from the text.",
+			"type": "int",
+			"value-min": {"x":-10, "y":-10},
+			"value-max": {"x":10, "y":10},
+			"value-default" : {"x":1, "y":1}
+		},
+		{
+			"control": "color",
+			"name": "colorShadow",
+			"title": "Shadow Color",
+			"tooltip": "The color of the text shadow.",
+			"value-default": "#000000"
+		},
+		{
+			"control": "spinBox",
+			"name": "opacityShadow",
+			"title": "Shadow Opacity",
+			"tooltip": "The opacity of the text shadow.",
+			"type": "double",
+			"value-min": 0,
+			"value-max": 1,
+			"value-default": 0.5,
+			"single-step": 0.1
+		}
+	]
+}
+

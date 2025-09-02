@@ -1,0 +1,2 @@
+Original SMB3 Koopaling code by KateBulka, MarioLover64 and DRACalgar Law
+Please credit these people when using these NPCs.

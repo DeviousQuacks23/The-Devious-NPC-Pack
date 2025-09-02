@@ -1,0 +1,34 @@
+{
+	"style" : "groupbox",
+	"title" : "Checkered Block Settings",
+	"layout": [
+		{
+			"control": "combobox",
+			"name": "rotationDirection",
+			"title": "Rotation Direction",
+			"tooltip": "The rotation direction of the block",
+			"elements": ["Clockwise", "Counterclockwise"],
+			"value-default": 0
+		},
+		{
+			"control": "spinbox",
+			"type": "int",
+			"name": "rotationDelay",
+			"title": "Rotation Delay",
+			"tooltip": "The rotation delay in ticks. Increasing this will make the block rotate later.",
+			"value-min": 0,
+			"value-max": 1000,
+			"value-default": 100
+		},
+		{
+			"control": "spinbox",
+			"type": "int",
+			"name": "rotationSpeed",
+			"title": "Rotation Speed",
+			"tooltip": "The rotation speed of the block. Increasing this will make the block rotate faster.",
+			"value-min": 1,
+			"value-max": 60,
+			"value-default": 8
+		}
+	]
+}

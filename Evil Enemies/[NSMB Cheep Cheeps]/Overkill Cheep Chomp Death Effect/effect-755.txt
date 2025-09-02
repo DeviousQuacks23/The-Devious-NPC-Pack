@@ -1,0 +1,16 @@
+[1]
+import=AI_ARC
+
+onTick=TICK_CHEEPCHOMP
+frames=1
+framestyle=1
+
+gravity=0.25
+speedX = -10:10
+speedY = -15:-5
+
+spawnBindX=0.75
+spawnBindY=0.75
+xAlign=MID
+yAlign=MID
+rotation=-13:13

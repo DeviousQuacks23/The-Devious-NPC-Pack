@@ -1,0 +1,6 @@
+[first]
+import=AI_SINGLE
+framespeed=2
+frames=7
+xAlign=MID
+yAlign=MID

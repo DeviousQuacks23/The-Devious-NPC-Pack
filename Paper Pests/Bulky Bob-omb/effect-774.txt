@@ -1,0 +1,7 @@
+[first]
+frames=2
+framespeed=2
+xAlign=CENTER
+yAlign=CENTER
+spawnBindX=CENTER
+spawnBindY=CENTER

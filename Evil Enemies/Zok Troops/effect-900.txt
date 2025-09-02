@@ -1,0 +1,12 @@
+[1]
+import=AI_ARC
+frames=1
+framestyle=1
+gravity=0.25
+speedY=-10
+speedX=-5:5
+rotation=-15:15
+xAlign=CENTER
+yAlign=CENTER
+spawnBindX=CENTER
+spawnBindY=CENTER

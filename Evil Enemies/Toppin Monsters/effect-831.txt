@@ -1,0 +1,7 @@
+[1]
+import=AI_ARC
+frames=1
+framestyle=1
+gravity=0.25
+speedX = -14:14
+speedY = -8

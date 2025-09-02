@@ -1,0 +1,9 @@
+
+;Explosion sprite by Askywalker
+
+[first]
+import=AI_SINGLE
+framespeed=4
+frames=4
+xAlign=MID
+yAlign=MID

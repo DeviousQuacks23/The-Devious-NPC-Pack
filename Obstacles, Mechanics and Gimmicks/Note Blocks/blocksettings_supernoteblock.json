@@ -1,0 +1,17 @@
+{
+	"style" : "groupbox",
+	"title" : "Super Note Block Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"name": "targetWarp",
+			"title": "Warp",
+			"tooltip": "The ID of the warp to fly to. If the value is 0, the player won't teleport.",
+			"type": "int",
+			"value-min": 0,
+			"value-max": 999,
+			"value-default": 0
+		}
+	]
+}
+

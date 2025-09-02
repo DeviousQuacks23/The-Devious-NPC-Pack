@@ -1,0 +1,30 @@
+If you want to trigger the alarm with an event, read this!
+
+First, you'll have to load the toppingJumpscare library into your luna.lua file:
+local toppingJumpscare = require("toppingJumpscare")
+
+Then, load the lua event 'onEvent'.
+For example:
+
+function onEvent(eventName)
+end
+
+You'll have to add a check for if the event name is the correct one.
+Let's say my event name is "wakeUp", we'll do:
+if eventName == "wakeUp" then
+
+Now, we just have to add this function:
+
+toppingJumpscare.riseAndShine()
+
+So, we should have something like this:
+
+--------------------------------------------------------------------
+
+local toppingJumpscare = require("toppingJumpscare")
+
+function onEvent(eventName)
+        if eventName == "wakeUp" then
+                toppingJumpscare.riseAndShine()
+        end
+end

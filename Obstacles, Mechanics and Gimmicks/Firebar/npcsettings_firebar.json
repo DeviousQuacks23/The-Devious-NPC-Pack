@@ -1,0 +1,75 @@
+{
+	"style" : "groupbox",
+	"title" : "Firebar Settings",
+	"layout": [
+		{
+			"control": "itemSelect",
+			"name": "id",
+			"title": "NPC ID",
+			"type": "npc",
+			"tooltip": "Which NPC the firebar uses.",
+			"value-default": 0
+		},
+		{
+			"control": "spinbox",
+			"name": "count",
+			"title": "Firebar Count",
+			"type": "int",
+			"tooltip": "How many firebars are attached.",
+			"value-default": 1,
+			"value-min": 1,
+			"value-max": 16
+		},
+		{
+			"control": "spinbox",
+			"name": "amount",
+			"title": "Amount",
+			"type": "int",
+			"tooltip": "The amount of NPCs on one firebar.",
+			"value-default": 6,
+			"value-min": 1,
+			"value-max": 32
+		},
+		{
+			"control": "spinbox",
+			"name": "segment",
+			"title": "Segment Distance",
+			"type": "int",
+			"tooltip": "The segment distance between each NPC.",
+			"value-default": 16,
+			"value-min": 0,
+			"value-max": 256,
+			"single-step": 16
+		},
+		{
+			"control": "spinbox",
+			"name": "rotation",
+			"title": "Starting Rotation",
+			"type": "int",
+			"tooltip": "How many degrees the firebar starts out at.",
+			"value-default": 0,
+			"value-min": -360,
+			"value-max": 360
+		},
+		{
+			"control": "spinbox",
+			"name": "speed",
+			"title": "Rotation Speed",
+			"type": "double",
+			"tooltip": "How many degrees it rotates per frame. Positive means clockwise, negative means counter-clockwise.",
+			"value-default": 3,
+			"value-min": -360,
+			"value-max": 360,
+			"decimals": 2,
+			"single-step": 0.5
+		},
+		{
+			"control": "checkBox",
+			"name": "centre",
+			"title": "Spawn Centre NPC?",
+			"tooltip": "If ticked, a NPC will be present where the centre of rotation is.",
+			"value-default": true
+		}
+	]
+}
+

@@ -1,0 +1,319 @@
+--NPCManager is required for setting basic NPC properties
+local npcManager = require("npcManager")
+local rng = require ("rng")
+local npcutils = require("npcs/npcutils")
+local playerStun = require("playerstun")
+local effectconfig = require("game/effectconfig")
+--Create the library table
+local ludwigshell = {}
+--NPC_ID is dynamic based on the name of the library file
+local npcID = NPC_ID
+local p = 0
+--Defines NPC config for our NPC. You can remove superfluous definitions.
+local ludwigshellSettings = {
+	id = npcID,
+	--Sprite size
+	gfxheight = 32,
+	gfxwidth = 44,
+	--Hitbox size. Bottom-center-bound to sprite size.
+	width = 28,
+	height = 32,
+	--Sprite offset from hitbox for adjusting hitbox anchor on sprite.
+	gfxoffsetx = 0,
+	gfxoffsety = 0,
+	--Frameloop-related
+	frames = 6,
+	framestyle = 0,
+	framespeed = 4, --# frames between frame change
+	--Movement speed. Only affects speedX by default.
+	speed = 1,
+	--Collision-related
+	npcblock = false,
+	npcblocktop = false, --Misnomer, affects whether thrown NPCs bounce off the NPC.
+	playerblock = false,
+	playerblocktop = false, --Also handles other NPCs walking atop this NPC.
+	score = 0,
+
+	nohurt=false,
+	nogravity = false,
+	noblockcollision = false,
+	nofireball = false,
+	noiceball = true,
+	noyoshi= true,
+	nowaterphysics = false,
+	--Various interactions
+	jumphurt = false, --If true, spiny-like
+	spinjumpsafe = true, --If true, prevents player hurt when spinjumping
+	harmlessgrab = false, --Held NPC hurts other NPCs if false
+	harmlessthrown = false, --Thrown NPC hurts other NPCs if false
+	staticdirection = true,
+	--Identity-related flags. Apply various vanilla AI based on the flag:
+	--iswalker = false,
+	--isbot = false,
+	--isvegetable = false,
+	--isshoe = false,
+	--isyoshi = false,
+	--isinteractable = false,
+	--iscoin = false,
+	--isvine = false,
+	--iscollectablegoal = false,
+	--isflying = false,
+	--iswaternpc = false,
+	--isshell = false,
+
+	--Emits light if the Darkness feature is active:
+	--lightradius = 100,
+	--lightbrightness = 1,
+	--lightoffsetx = 0,
+	--lightoffsety = 0,
+	--lightcolor = Color.white,
+
+	--Define custom properties below
+	counter = 0,
+	immunity = 16,
+	spreadShot = true,
+}
+
+--Applies NPC settings
+npcManager.setNpcSettings(ludwigshellSettings)
+
+--Register the vulnerable harm types for this NPC. The first table defines the harm types the NPC should be affected by, while the second maps an effect to each, if desired.
+npcManager.registerHarmTypes(npcID,
+	{
+		HARM_TYPE_JUMP,
+		--HARM_TYPE_FROMBELOW,
+		HARM_TYPE_NPC,
+		HARM_TYPE_PROJECTILE_USED,
+		HARM_TYPE_LAVA,
+		--HARM_TYPE_HELD,
+		--HARM_TYPE_TAIL,
+		HARM_TYPE_SPINJUMP,
+		HARM_TYPE_OFFSCREEN,
+		HARM_TYPE_SWORD
+	}, 
+	{
+		--[HARM_TYPE_JUMP]=10,
+		--[HARM_TYPE_FROMBELOW]=10,
+		[HARM_TYPE_NPC]=npcID-1,
+		[HARM_TYPE_PROJECTILE_USED]=npcID-1,
+		[HARM_TYPE_LAVA]={id=13, xoffset=0.5, xoffsetBack = 0, yoffset=1, yoffsetBack = 1.5},
+		--[HARM_TYPE_HELD]=10,
+		--[HARM_TYPE_TAIL]=10,
+		--[HARM_TYPE_SPINJUMP]=10,
+		[HARM_TYPE_OFFSCREEN]=npcID-1,
+		[HARM_TYPE_SWORD]=npcID-1,
+	}
+);
+
+--Custom local definitions below
+function effectconfig.onTick.TICK_SMB3LUDWIG(v)
+    if v.timer >= 440 then
+		v.speedY = 0
+	else
+		if v.timer == 439 then
+			SFX.play(63)
+		end
+		v.speedY = -8
+	end
+end
+
+--Register events
+function ludwigshell.onInitAPI()
+	npcManager.registerEvent(npcID, ludwigshell, "onTickEndNPC")
+	--npcManager.registerEvent(npcID, ludwigshell, "onTickEndNPC")
+	--npcManager.registerEvent(npcID, ludwigshell, "onDrawNPC")
+	registerEvent(ludwigshell, "onNPCHarm")
+end
+
+function ludwigshell.onTickEndNPC(v)
+	--Don't act during time freeze
+	if Defines.levelFreeze then return end
+	
+	local data = v.data
+	
+	--If despawned
+	if v:mem(0x12A, FIELD_WORD) <= 0 then
+		--Reset our properties, if necessary
+		data.initialized = false
+		return
+	end
+
+	--Initialize
+	if not data.initialized then
+		--Initialize necessary data.
+		data.special = 0
+		data.counter = ludwigSettings.counter --or 0
+		data.jumping = false
+		data.hp = data.hp or 15
+		data.immunity = 0
+		p = 0
+	end
+
+	--Depending on the NPC, these checks must be handled differently
+	if v:mem(0x12C, FIELD_WORD) > 0    --Grabbed
+	or v:mem(0x136, FIELD_BOOL)        --Thrown
+	or v:mem(0x138, FIELD_WORD) > 0    --Contained within
+	then
+		--Handling
+	end
+	--Execute main AI.
+	if p == 0 then 
+        C = 0
+		while(p==0) do
+			B = Player(rng.randomInt(0, Player.count()))
+			if B:mem(0x13C, FIELD_BOOL) == false and B.section == v:mem(0x146,FIELD_WORD) then
+				p = B
+			end
+			C = C + 1
+			if C >= 20 then
+				p = player
+			end
+		end
+	end
+
+	npcutils.faceNearestPlayer(v)
+	if data.special == 0 then
+		data.counter = data.counter + 1
+		if data.counter == 1 then
+			v.speedX = 0
+			v.speedY = 0
+		end
+		if data.counter == 45 and v.speedY == 0 then
+			v.speedY = -7.5
+		end
+		if data.counter >= 60 then
+			data.special = 1
+			data.counter = 0
+		end
+	elseif data.special == 1 then
+		v.speedX = v.speedX + (0.2 * v.direction)
+		if v.speedX > 5 then
+			v.speedX = 5
+		elseif v.speedX < -5 then
+			v.speedX = -5
+		end
+		if v.collidesBlockRight or v.collidesBlockLeft then
+		    SFX.play(37)
+		    Defines.earthquake = 7
+		    for k, p in ipairs(Player.get()) do
+			    if p:isGroundTouching() and not playerStun.isStunned(k) and v:mem(0x146, FIELD_WORD) == player.section then
+		    		playerStun.stunPlayer(k, 70)
+	    		end
+	    	end
+	    end
+		data.counter = data.counter + 1
+		if v.collidesBlockBottom and data.counter < 300 then
+			v.speedY = -7.5
+			SFX.play(37)
+		    Defines.earthquake = 7
+		    for k, p in ipairs(Player.get()) do
+			    if p:isGroundTouching() and not playerStun.isStunned(k) and v:mem(0x146, FIELD_WORD) == player.section then
+		    		playerStun.stunPlayer(k, 70)
+	    		end
+	    	end
+		end
+                
+		if data.counter >= 300 and v.speedY == 0 then
+			data.special = 2
+			data.counter = 0
+		end
+	elseif data.special == 2 then
+		v.speedY = -5 - rng.randomInt(1,3)
+		data.special = 3
+	elseif data.special == 3 then
+		if v.speedX > 2.5 then
+			v.speedX = v.speedX - 0.2
+		elseif v.speedX < -2.5 then
+			v.speedX = v.speedX + 0.2
+		end
+		data.counter = data.counter + 1
+                
+		if data.counter == 20 then
+			local helth = data.hp
+			local immune = data.immunity
+			isboss = v.legacyBoss
+			v:transform(npcID-1)
+			v.data.hp = helth
+			v.legacyBoss = isboss
+			v.data.special = 0
+			v.data.dir = v.direction
+			v.data.harmable = true
+			v.data.immunity = immune
+			--.Special4 = 0
+			p = 0
+			--.Special6 = 0
+		end
+	else
+		data.special = 0
+	end
+
+	if data.immunity > 0 then
+		data.immunity = data.immunity - 1
+	end
+	v.despawnTimer = 10
+end
+
+function ludwigshell.onNPCHarm (eventObj, killedNPC, killReason, culprit)
+	if  killedNPC.id == npcID and killReason ~= HARM_TYPE_OFFSCREEN then
+	if  killReason ~= HARM_TYPE_LAVA then
+		eventObj.cancelled = true
+		local data = killedNPC.data
+		immune = data.immunity
+		if immune == 0 then
+		if killReason == HARM_TYPE_PROJECTILE_USED  then
+			data.hp = data.hp - 1
+			immune = NPC.config[killedNPC.id].immunity
+		elseif killReason == HARM_TYPE_SWORD then
+			SFX.play(89)
+			data.hp = data.hp - 2
+			immune = NPC.config[killedNPC.id].immunity
+		elseif killReason == HARM_TYPE_NPC then
+			if culprit ~= nil then Effect.spawn(75, culprit.x, culprit.y) end
+			if type(culprit) == "NPC" and (culprit.id == 13 or culprit.id == 108)  then
+				SFX.play(9)
+				data.hp = data.hp - 1
+				immune = NPC.config[killedNPC.id].immunity
+			else
+				SFX.play(39)
+				data.hp = data.hp - 5
+				data.special = 5
+				immune = NPC.config[killedNPC.id].immunity
+			end
+		if  type(culprit) == "NPC" and (culprit.id ~= 108) then
+			culprit:harm(HARM_TYPE_NPC)
+		end
+		elseif killReason == HARM_TYPE_LAVA and killedNPC ~= nil then
+			killedNPC:kill(HARM_TYPE_OFFSCREEN)
+		elseif killReason == HARM_TYPE_JUMP or killReason == HARM_TYPE_SPINJUMP then
+			SFX.play(2)
+			if culprit.x + culprit.width / 2 < killedNPC.x + killedNPC.width / 2 then
+				culprit.speedX = -3
+			else
+				culprit.speedX = 3
+			end
+		end
+		if data.hp <= 0  then
+	          Misc.givePoints(8,vector(killedNPC.x + (killedNPC.width/2),killedNPC.y),true)
+			--[[if killedNPC.legacyBoss then
+				oldX = killedNPC.x
+				oldY = killedNPC.y
+				oldWidth = killedNPC.width
+				oldSection = killedNPC:mem(0x146,FIELD_WORD)
+				Routine.run(function()
+					Routine.wait(1,false)
+					goal = NPC.spawn(16, oldX, oldY, oldSection,true,true)
+					goal:mem(0xA8, FIELD_DFLOAT,0)
+					goal.speedY = -5
+					end
+				)
+			end]]
+			killedNPC:kill(HARM_TYPE_OFFSCREEN)
+		end
+		end
+		data.immunity = immune
+	end
+	end
+end
+
+--Gotta return the library table!
+return ludwigshell

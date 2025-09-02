@@ -1,0 +1,10 @@
+[1]
+lifetime = 25
+frames=1
+framestyle=0
+speedX = 0
+speedY=0
+gravity=0
+xAlign=0.5
+yAlign=1
+rotation=-0.5:0.5

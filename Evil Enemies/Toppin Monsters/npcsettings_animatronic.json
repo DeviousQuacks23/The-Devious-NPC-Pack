@@ -1,0 +1,19 @@
+{
+	"style" : "tree",
+	"title" : "Toppin Monster Settings",
+	"layout": [
+		{
+			"control": "checkbox",
+			"name": "shouldTP",
+			"title": "Should the player teleport to the below coordinates when jumpscared?",
+			"value-default": false
+		},
+		{
+			"control": "pointBox",
+			"name": "tele",
+			"title": "Teleport to...",
+			"value-default" : {"x":0, "y":0}
+		}
+	]
+}
+

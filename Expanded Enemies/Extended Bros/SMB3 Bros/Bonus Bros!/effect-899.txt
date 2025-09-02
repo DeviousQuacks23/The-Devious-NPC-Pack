@@ -1,0 +1,4 @@
+[first]
+lifetime = 8
+xOffset=-8:8
+yOffset=-8:8

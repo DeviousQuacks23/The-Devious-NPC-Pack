@@ -1,0 +1,14 @@
+[1]
+onInit=INIT_SETDIR_MBUSH
+onTick=TICK_MBUSH
+onDeath = DEATH_MBUSH
+framestyle=0
+frames=1
+lifetime = 30
+speedY = -10
+gravity = 0.5
+maxSpeedY=10
+xAlign = 0.5
+yAlign = 0.5
+spawnBindX=1
+spawnBindY=1

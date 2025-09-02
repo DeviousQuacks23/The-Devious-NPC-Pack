@@ -1,0 +1,18 @@
+{
+	"style" : "groupbox",
+	"title" : "Directional Block Settings",
+	"layout": [
+		{
+			"control": "combobox",
+			"name": "dir",
+			"title": "Direction of the Block:",
+			"value-default": 0,
+			"elements": [
+				"Up",
+                                "Left",
+                                "Right"
+			]
+		}
+	]
+}
+

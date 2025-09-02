@@ -1,0 +1,11 @@
+[1]
+lifetime = 70
+frames=1
+framestyle=0
+speedX = 0
+speedY=0
+gravity=0
+xAlign=0.5
+yAlign=1
+angle = -135:135
+rotation=-1:1

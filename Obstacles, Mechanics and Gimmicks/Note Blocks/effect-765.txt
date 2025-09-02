@@ -1,0 +1,5 @@
+[1]
+onTick = TICK_ICICLEDRIP
+lifetime = 30
+speedY = -7
+gravity = 0.5

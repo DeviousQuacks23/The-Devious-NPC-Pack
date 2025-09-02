@@ -1,0 +1,35 @@
+{
+	"style" : "groupbox",
+	"title" : "Kraid Settings",
+	"layout": [
+		{
+			"control": "lineEdit",
+			"name": "phaseOneEvent",
+			"title": "Phase One Event Name",
+			"tooltip": "The name of the event triggered when the NPC starts Phase 1.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "phaseOneEmergeEvent",
+			"title": "Phase One Emerging Event Name",
+			"tooltip": "The name of the event triggered when the NPC is emerging from Phase 1.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "phaseTwoEvent",
+			"title": "Phase Two Event Name",
+			"tooltip": "The name of the event triggered when the NPC starts Phase 2.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "deathEvent",
+			"title": "Death Event Name",
+			"tooltip": "The name of the event triggered when the NPC dies.",
+			"value-default": ""
+		}
+	]
+}
+

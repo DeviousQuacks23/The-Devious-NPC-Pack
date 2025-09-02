@@ -1,0 +1,6 @@
+[first]
+frames=2
+framespeed=2
+
+xAlign=MID
+yAlign=MID
