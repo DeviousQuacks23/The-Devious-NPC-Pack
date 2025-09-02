@@ -32,7 +32,7 @@ local bulletSettings = {
 	height = 32,
 	
 	frames = 2,
-	framestyle = 0,
+	framestyle = 1,
 	framespeed = 8,
 	
 	speed = 1,
@@ -54,9 +54,11 @@ local bulletSettings = {
 	spinjumpsafe = false,
 	harmlessgrab = false,
 	harmlessthrown = false,
+	staticdirection = true,
 
-	lifetime = 448,        -- How long the NPC waits before exploding.
-	rotationSpeed = 0.01, -- How quickly the NPC rotates.
+	lifetime = 480,        -- How long the NPC waits before exploding.
+	bulletSpeed = 1.75,
+	rotationSpeed = 0.025, -- How quickly the NPC rotates.
 
 	explosionType = explosionType, -- The type of explosion the NPC spawns when exploding.
 }

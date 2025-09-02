@@ -720,7 +720,7 @@ function mechakoopa.onTickEndBullet(v)
 
     if not data.timer then
         data.timer = 0
-        data.rotation = ((math.pi*1.5)+((math.pi*0.5)*v.direction))%(math.pi*2)
+        data.rotation = 0
 
         data.belongsToPlayer = false
     end
@@ -742,7 +742,6 @@ function mechakoopa.onTickEndBullet(v)
             v:mem(0x136,FIELD_BOOL,false)
         end
 
-        data.rotation = ((math.pi*1.5)+((math.pi*0.5)*v.direction))%(math.pi*2)
         return
     end
 
@@ -755,10 +754,11 @@ function mechakoopa.onTickEndBullet(v)
             Explosion.spawn(v.x+(v.width/2),v.y+(v.height/2),config.explosionType)
         end
     elseif (data.timer%math.floor(24-(v.speedX+v.speedY))) == 0 then
+	local offset = vector(v.direction*v.width*0.5,0):rotate(data.rotation)
         local e = Effect.spawn(10,0,0)
 
-        e.x = v.x+(v.width /2)-(math.cos(data.rotation)*(v.width *0.4))-(e.width /2)
-        e.y = v.y+(v.height/2)-(math.sin(data.rotation)*(v.height*0.4))-(e.height/2)
+        e.x = v.x+(v.width /2)-offset.x-(e.width /2)
+        e.y = v.y+(v.height/2)-offset.y-(e.height/2)
     end
 
     -- Home in on target
@@ -777,26 +777,28 @@ function mechakoopa.onTickEndBullet(v)
         n = Player.getNearest(v.x+(v.width/2),v.y+(v.height/2)) -- Get the nearest player
     end
 
-    local rotationSpeed = 0
-    
+    -- Find rotation to go towards
+    -- Taken from MDA's Bullet Bills
     if n then
-        local angle = math.atan2((n.y+(n.height/2))-(v.y+(v.height/2)),(n.x+(n.width/2))-(v.x+(v.width/2)))%(math.pi*2)
+            local distX = (n.x + n.width *0.5) - (v.x + v.width *0.5)
+            local distY = (n.y + n.height*0.5) - (v.y + v.height*0.5)
 
-        local normalDistance = math.abs(angle-data.rotation) -- How far it'd have to rotate to turn around normallt
-        local loopDistance = math.min(math.abs(angle-(data.rotation+(math.pi*2))),math.abs(angle-(data.rotation-(math.pi*2)))) -- How far it'd have to rotate to loop around
+            local targetRotation = math.deg(math.atan2(distY,distX))
 
-        rotationSpeed = math.min(normalDistance,loopDistance)*config.rotationSpeed
+            if v.direction == DIR_LEFT then
+                targetRotation = targetRotation + 180
+            end
 
-		if (data.rotation > angle) ~= (normalDistance > loopDistance) then
-			data.rotation = (data.rotation-rotationSpeed)%(math.pi*2) -- CCW
-		else
-			data.rotation = (data.rotation+rotationSpeed)%(math.pi*2) -- CW
-		end
+            targetRotation = targetRotation % 360
+
+            -- Interpolate to it
+            data.rotation = math.anglelerp(data.rotation,targetRotation,config.rotationSpeed)
     end
 
-    -- Move in the appropriate direction
-    v.speedX = math.cos(data.rotation)*math.max(0,1-(math.abs(rotationSpeed)*20))*2
-    v.speedY = math.sin(data.rotation)*math.max(0,1-(math.abs(rotationSpeed)*20))*2*config.speed
+    local speed = vector(config.bulletSpeed*v.direction,0):rotate(data.rotation)
+        
+    v.speedX = speed.x
+    v.speedY = speed.y
 end
 
 function mechakoopa.onDrawBullet(v)
@@ -817,7 +819,7 @@ function mechakoopa.onDrawBullet(v)
 	data.sprite.x = v.x+(v.width/2)
 	data.sprite.y = v.y+v.height-(config.gfxheight/2)
 
-	data.sprite.rotation = math.deg(data.rotation or 0)
+	data.sprite.rotation = data.rotation or 0
 
 	data.sprite.pivot = Sprite.align.CENTRE
 	data.sprite.texpivot = Sprite.align.CENTRE
