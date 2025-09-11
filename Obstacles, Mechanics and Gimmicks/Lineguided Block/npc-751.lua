@@ -169,6 +169,7 @@ function lgBlock.onTickNPC(v)
 
     	-- Some other behaviours
 
+	v.despawnTimer = 180
     	npcutils.applyLayerMovement(v)
     	local lineguideData = v.data._basegame.lineguide
 
