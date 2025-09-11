@@ -76,7 +76,7 @@ local broozerSettings = {
 	chaseMaxSpeed = 4,
 	chaseSoundDelay = 12,
 	blockBreakSpeedMod = 0.05,
-	npcBruiseSpeedMod = 0.5,
+	npcBruiseSpeedMod = 0.75,
 
 	breakableBlocks = {2, 4, 5, 60, 88, 89, 90, 115, 186, 188, 192, 193, 224, 225, 226, 293, 526, 668, 682, 683, 694, 457, 280, 1375, 1374},
 
