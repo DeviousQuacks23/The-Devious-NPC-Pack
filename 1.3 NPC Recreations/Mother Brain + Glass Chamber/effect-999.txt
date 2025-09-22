@@ -1,0 +1,8 @@
+[first]
+import=AI_ARC
+frames=7
+variants=2
+framespeed=4
+onInit=INIT_GLASSSHARDS2
+speedX = -4:4
+speedY = -6:-16

@@ -1,0 +1,13 @@
+{
+	"style" : "groupbox",
+	"title" : "Skull Raft Settings",
+	"layout": [
+		{
+			"control": "checkBox",
+			"name": "shouldStartActive",
+			"title": "Start Active?",
+			"tooltip": "If ticked, the skull raft will start active, otherwise a player has to stand on the raft to activate it.",
+			"value-default": false
+		}
+	]
+}

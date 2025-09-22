@@ -1,0 +1,5 @@
+[1]
+onTick = TICK_MOTHER
+framestyle = 1
+priority = BACKGROUND
+lifetime = 300

@@ -1,0 +1,82 @@
+{
+    "style": "groupbox",
+    "title": "Glass Chamber Settings",
+    "layout": [
+        {
+	"control": "listGroup",
+	"name": "contentList",
+        "collapse": true,
+        "default-collapsed": false,
+	"title": "Contents",
+	"children": [
+                {
+                    "control": "itemSelect",
+                    "name": "id",
+                    "title": "NPC",
+                    "type": "npc",
+                    "tooltip": "Which NPC should be in the block.",
+                    "value-default": 0
+                },
+                {
+                    "control": "spinBox",
+                    "type": "int",
+                    "name": "count",
+                    "title" : "Amount",
+                    "tooltip": "Number of this NPC to spawn.",
+                    "value-default": 1,
+                    "value-min": 1,
+                    "value-max": 99
+                },
+                {
+                    "control": "spinBox",
+                    "type": "double",
+                    "name": "offsetX",
+                    "title" : "Offset X",
+                    "tooltip": "From 0 to 1, determines horizontal position of the content.",
+                    "value-default": 0.5,
+                    "value-min": 0,
+                    "value-max": 1,
+                    "decimals": 3
+                },
+                {
+                    "control": "spinBox",
+                    "type": "double",
+                    "name": "offsetY",
+                    "title" : "Offset Y",
+                    "tooltip": "From 0 to 1, determines vertical position of the content.",
+                    "value-default": 0.5,
+                    "value-min": 0,
+                    "value-max": 1,
+                    "decimals": 3
+                },
+                {
+                    "control": "group",
+                    "collapse": true,
+                    "default-collapsed": true,
+                    "name": "advanced",
+                    "title": "Advanced Data",
+                    "children": [
+			    {
+				"control": "multiLineEdit",
+				"name": "tagsInput",
+				"title": "Tags",
+				"value-default": ""
+			    },
+			    {
+				"control": "group",
+				"title": "Examples",
+				"children": [
+				{
+			  	    "control": "lineEdit",
+			  	    "title": "Example",
+			  	    "value-default": "v.ai1 = 1;",
+			  	    "read-only": true
+			        }
+			    ]
+			}
+                    ]
+                }
+	    ]
+	}
+    ]
+}

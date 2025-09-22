@@ -1,0 +1,24 @@
+{
+	"style" : "groupbox",
+	"title" : "No Mount Sign Settings",
+	"layout": [
+		{
+			"control": "spinbox",
+			"name": "addY",
+			"title": "Additional Detection Offset:",
+			"type": "int",
+			"tooltip": "The additional detection hitbox, above the sign.",
+			"value-default": 512,
+			"value-min": 0,
+			"value-max": 2048
+		},
+		{
+			"control": "comboBox",
+			"name": "signDir",
+			"title": "Sign Direction (Visual):",
+			"tooltip": "The visual direction of the sign (the arrow).",
+			"elements": ["Both Directions", "Left", "Right"],
+			"value-default": 0
+		}
+	]
+}
