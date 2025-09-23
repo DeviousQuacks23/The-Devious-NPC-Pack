@@ -1,16 +1,16 @@
 --[[
 
-    Extended Goombas (v1.0)
+    Extended Goombas 
     Made by DeviousQuacks23
     Please give credit...
 
     Based off of the galoombas written by MrDoubleA, so credits to him.
     This was also inspired by extendedKoopas.lua (also written by MDA)
 
-    SMB1 Goombrat sprites by FungiCaptain, stomped sprite by SuperSledgeBro
-    SMB1 Galoomba and Goombud sprites by me, based on sprites by JDFRG
+    SMB1 Goombrat sprites by SuperSledgeBro
+    SMB1 Galoomba and Goombud sprites by Evan F, tweaked by me
 
-    SMB3 Goombrat sprites by Prismkick, modified by me
+    SMB3 Goombrat sprites by Prismkick
     SMB3 Galoomba sprites by DogeMayo
     SMB3 Goombud sprites by MarShadowSlime, modified by me
 
