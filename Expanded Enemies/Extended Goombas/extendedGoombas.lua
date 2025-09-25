@@ -14,7 +14,7 @@
     SMB3 Galoomba sprites by DogeMayo
     SMB3 Goombud sprites by MarShadowSlime, modified by me
 
-    SMW Goomba and Goombrat sprites by Smuglutena
+    SMW Goomba and Goombrat sprites by Stranimations, palettes tweaked by me
 ]]
 
 local npcManager = require("npcManager")
