@@ -13,8 +13,10 @@ end
 Misc.groupsCollide["skullRafts"]["skullRafts"] = false
 
 local function skullRide(v, data)
-	for _,n in ipairs(NPC.getIntersecting(v.x - 32, v.y - 32, v.x + v.width + 32, v.y + v.height + 32)) do
-		if not n.data.active and n.id == v.id and not n.isHidden and not n.friendly then
+	local otherRafts = NPC.get(v.id, v.section)
+
+	for _,n in ipairs(otherRafts) do
+		if not n.data.active and not n.isHidden and not n.friendly then
 			if Colliders.collide(data.hitbox, n) then
 				n.data.active = true
 				skullRide(n, n.data)

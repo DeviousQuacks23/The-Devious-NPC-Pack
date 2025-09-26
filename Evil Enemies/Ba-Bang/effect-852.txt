@@ -1,0 +1,6 @@
+[1]
+import=AI_ARC
+framestyle=1
+
+speedX = 0
+speedY = -12
