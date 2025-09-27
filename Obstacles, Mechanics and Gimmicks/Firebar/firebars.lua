@@ -3,7 +3,7 @@ local npcutils = require("npcs/npcutils")
 local lineguide = require("lineguide")
 
 -- Based on Marioman2007's Orbits code, and MDA's Swinging Platform code
--- Firebar base sprite by SuperSledgeBro
+-- Firebar base sprite by SuperSledgeBro, Spike Bar sprites by Smuglutena
 
 local firebar = {}
 
