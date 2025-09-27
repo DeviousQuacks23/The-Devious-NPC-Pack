@@ -105,10 +105,10 @@ function jumpOrb.onTickEndNPC(v)
         data.cooldown = data.cooldown - 1
 
         if data.cooldown > 0 then
-                if data.scale > 1 then data.scale = data.scale - 0.05 end
+		data.scale = math.max(1, data.scale - 0.075)
         else
-                if data.scale > 0.75 then data.scale = data.scale - 0.025 end
-                if data.scale <= 0.75 then data.scale = 1 end
+		data.scale = math.max(0.75, data.scale - 0.025)
+		if lunatime.tick() % 16 == 0 then data.scale = 1 end
         end
 
         npcutils.applyLayerMovement(v)

@@ -4,6 +4,7 @@ local terrisa = {}
 
 local npcManager = require("npcManager")
 local npcutils = require("npcs/npcutils")
+local easing = require("ext/easing")
 
 local npcID = NPC_ID
 
@@ -36,8 +37,6 @@ terrisa.config = npcManager.setNpcSettings({
 	decely = 0.15,
 
         jumpscareImg = Graphics.loadImageResolved("npc-"..npcID.."b.png"),
-        jumpscareWidth = 84,
-        jumpscareHeight = 76,
 })
 
 local CHASE = 0
@@ -81,23 +80,10 @@ function terrisa.onTickEndNPC(v)
                 data.scareX = 0
                 data.scareY = 0
                 data.scareScale = 1
+		data.scareLerp = 0
                 data.scareFrame = 0
                 data.scareOpacity = 0
-                data.hasCentered = false
-                data.hasDoneStuff = false
 	end
-
-	if v.heldIndex ~= 0 
-	or v.isProjectile   
-	or v.forcedState > 0
-	then
-                v.animationFrame = 0
-		return
-	end
-
-        v.despawnTimer = 180
-        data.timer = data.timer + 1
-	data.animTimer = data.animTimer + 1
 
         for k,j in ipairs(Player.getIntersecting(v.x - 2, v.y - 2, v.x + v.width + 2, v.y + v.height + 2)) do
                 if j.deathTimer == 1 then
@@ -112,9 +98,22 @@ function terrisa.onTickEndNPC(v)
                                 data.state = JUMPSCARE
                                 data.opacity = 1
                                 data.timer = 0
+				data.scale = 1
 		        end
                 end
         end
+
+	if v.heldIndex ~= 0 
+	or v.isProjectile   
+	or v.forcedState > 0
+	then
+                v.animationFrame = 0
+		return
+	end
+
+        v.despawnTimer = 180
+        data.timer = data.timer + 1
+	data.animTimer = data.animTimer + 1
 
         for k,l in ipairs(Player.get()) do
                 if l.section == v.section and l.hasStarman then
@@ -130,6 +129,7 @@ function terrisa.onTickEndNPC(v)
                 data.opacity = math.min(1,data.opacity + 0.01)
                 data.scale = 1
                 data.rotation = 0
+
                 if p then
 		        if v.x + v.width/2 < p.x + p.width/2 then
 			        if v.speedX < cfg.maxspeedx then
@@ -170,6 +170,7 @@ function terrisa.onTickEndNPC(v)
 			        end
 		        end
 	        end
+
                 if data.timer >= 730 then
                         data.state = LAUGH
                         data.timer = 0
@@ -184,6 +185,7 @@ function terrisa.onTickEndNPC(v)
                 else
                         v.speedX = 0
                 end
+
                 if v.speedY > 0 then
                         v.speedY = math.max(0, v.speedY - cfg.decely)
                 elseif v.speedY < 0 then
@@ -191,12 +193,16 @@ function terrisa.onTickEndNPC(v)
                 else
                         v.speedY = 0
                 end
+
                 v.animationFrame = math.floor(data.animTimer / 4) % 2 + 1
                 data.rotation = math.sin((data.timer / 12) * math.pi) * 12
                 data.opacity = math.min(1,data.opacity + 0.01)
+
                 npcutils.faceNearestPlayer(v)
+
                 data.scale = data.scale - 0.05
                 if data.scale <= 1 then data.scale = 1.5 end
+
                 if RNG.randomInt(1,15) == 1 then
                         local e = Effect.spawn(80, v.x + RNG.randomInt(0,v.width), v.y + RNG.randomInt(0,v.height))
                         e.speedX = RNG.random(-2, 2)
@@ -204,6 +210,7 @@ function terrisa.onTickEndNPC(v)
                         e.x = e.x - e.width *0.5
                         e.y = e.y - e.height*0.5
                 end
+
                 if data.timer >= 90 then
                         data.state = CHASE
                         data.timer = 0
@@ -212,14 +219,17 @@ function terrisa.onTickEndNPC(v)
                 v.speedX = 0
                 v.speedY = 0
                 v.animationFrame = math.floor(data.animTimer / 128) % 2 + 3
+
                 data.opacity = math.max(0.5,data.opacity - 0.005)
                 data.scale = 1
                 data.rotation = 0
+
                 if v.animationFrame == 4 then
                         if (data.timer % 20) == 0 then v.direction = -v.direction end
                 else
                         v.direction = data.initialDir
                 end 
+
                 for k,l in ipairs(Player.get()) do
                         if l.section == v.section and not l.hasStarman then
                                 data.state = CHASE
@@ -228,10 +238,10 @@ function terrisa.onTickEndNPC(v)
                         end
                 end
         elseif data.state == JUMPSCARE then
-                v.speedX = 0
-                v.speedY = 0
                 data.scareX = v.x + (v.width * 0.5)
                 data.scareY = v.y + (v.height * 0.5)
+        	v.speedY = 0
+
                 if data.timer >= 20 then
                         v.animationFrame = 5
                         data.rotation = 0
@@ -239,33 +249,40 @@ function terrisa.onTickEndNPC(v)
                         v.animationFrame = math.floor(data.animTimer / 4) % 2 + 1
                         data.rotation = math.sin((data.timer / 12) * math.pi) * 12
                 end
+
                 if data.timer >= 30 and data.timer <= 52 and data.screenOpacity <= 1 then
-                        data.screenOpacity = math.min(1,data.screenOpacity + 0.05)
+                        data.screenOpacity = math.min(1, data.screenOpacity + 0.05)
                 else
-                        data.screenOpacity = math.max(0,data.screenOpacity - 0.05)
+                        data.screenOpacity = math.max(0, data.screenOpacity - 0.05)
                 end
+
                 if data.screenOpacity == 1 then data.isRendering = false end
                 if data.timer >= 90 then
                         if data.timer >= 100 then 
-                                data.scareOpacity = math.min(0.5,data.scareOpacity + 0.005) 
-                                data.opacity = math.max(0,data.opacity - 0.01)
+                                data.scareOpacity = math.min(0.5, data.scareOpacity + 0.005) 
+                                data.opacity = math.max(0, data.opacity - 0.01)
                         end
-                        if not data.hasDoneStuff then
-                                data.hasDoneStuff = true
+			
+			if data.timer == 90 then
+				v.speedX = math.sign((camera.x + (camera.width / 2)) - (v.x + (v.width / 2))) * 24
                                 SFX.play("terrisaJumpscare.ogg")
                                 data.scareFrame = 1
                         end
-                        data.scareScale = math.min(7,data.scareScale + 0.3)
-                        if (v.x == camera.x + (camera.width * 0.5)) and (v.y == (camera.y + (camera.height * 0.5))) then data.hasCentered = true end
-                        if not data.hasCentered then
-                                v.x = (v.x < camera.x + (camera.width * 0.5) and math.min(camera.x + (camera.width * 0.5),v.x + 32)) or math.max(camera.x + (camera.width * 0.5),v.x - 32)
-                                v.y = (v.y < (camera.y + (camera.height * 0.5)) and math.min((camera.y + (camera.height * 0.5)),v.y + 32)) or math.max((camera.y + (camera.height * 0.5)),v.y - 32)
-                        else
-				data.w = 3 * math.pi/65
-				data.sineTimer = data.sineTimer or 0
-				data.sineTimer = data.sineTimer + 1
-				v.speedX = 160 * data.w * math.cos(data.w * data.sineTimer)
-                        end
+
+			data.scareLerp = math.min(1, data.scareLerp + 0.05) 
+                        data.scareScale = easing.outBack(data.scareLerp, 0, 7, 1, 3)
+
+			if (v.x + v.width * 0.5) > (camera.x + camera.width * 0.5) then
+				v.speedX = v.speedX - 1.5
+			else
+				v.speedX = v.speedX + 1.5
+			end
+			v.speedX = math.clamp(v.speedX, -24, 24)
+
+			local distY = camera.y + (camera.height * 0.5) - v.y + (v.height * 0.5)
+                        v.speedY = v.speedY + (distY * 0.25)
+		else
+                	v.speedX = 0
                 end
         end
 
@@ -285,6 +302,8 @@ function terrisa.onDrawNPC(v)
         local config = NPC.config[npcID]
 
 	local img = Graphics.sprites.npc[v.id].img
+	local jumpImg = config.jumpscareImg
+	local height = (jumpImg.height / 2)
         local priority = (lowPriorityStates[v:mem(0x138,FIELD_WORD)] and -75) or (v:mem(0x12C,FIELD_WORD) > 0 and -30) or (config.foreground and -15) or -45
 
 	if data.isRendering then
@@ -305,13 +324,13 @@ function terrisa.onDrawNPC(v)
 	        }
         else
 	        Graphics.drawBox{
-		        texture = config.jumpscareImg,
+		        texture = jumpImg,
 		        x = data.scareX,
 		        y = data.scareY,
-		        width = config.jumpscareWidth * data.scareScale,
-		        height = config.jumpscareHeight * data.scareScale,
-		        sourceY = data.scareFrame * config.jumpscareHeight,
-		        sourceHeight = config.jumpscareHeight,
+		        width = jumpImg.width * data.scareScale,
+		        height = height * data.scareScale,
+		        sourceY = data.scareFrame * height,
+		        sourceHeight = height,
 		        sceneCoords = true,
 		        centered = true,
                         color = Color.white .. data.opacity,
@@ -321,13 +340,13 @@ function terrisa.onDrawNPC(v)
                 -- Silhoutte
 
 	        Graphics.drawBox{
-		        texture = config.jumpscareImg,
+		        texture = jumpImg,
 		        x = data.scareX,
 		        y = data.scareY,
-		        width = config.jumpscareWidth * data.scareScale,
-		        height = config.jumpscareHeight * data.scareScale,
-		        sourceY = data.scareFrame * config.jumpscareHeight,
-		        sourceHeight = config.jumpscareHeight,
+		        width = jumpImg.width * data.scareScale,
+		        height = height * data.scareScale,
+		        sourceY = data.scareFrame * height,
+		        sourceHeight = height,
 		        sceneCoords = true,
 		        centered = true,
                         color = Color.black .. data.scareOpacity,
