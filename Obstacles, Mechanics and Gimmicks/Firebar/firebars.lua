@@ -86,6 +86,9 @@ function firebar.onTickEndNPC(v)
 
             		n.x = math.floor(math.lerp(v.x + v.width * 0.5, posX, codeClusterfuck) - n.width / 2)
             		n.y = math.floor(math.lerp(v.y + v.height * 0.5, posY, codeClusterfuck) - n.height / 2)
+
+        		n.speedX = 0
+        		n.speedY = 0
 		end
 
 		-- Text.print(data.npcRadius[n], 0, 16 * (k - 1))
