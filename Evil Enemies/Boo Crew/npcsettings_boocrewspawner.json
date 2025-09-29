@@ -1,0 +1,43 @@
+{
+	"style" : "groupbox",
+	"title" : "Boo Crew Spawner Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"name": "sound",
+			"title": "Sound Effect",
+			"tooltip": "The sound that plays when an NPC spawns.",
+			"type": "int",
+			"value-min": 0,
+			"value-max": 91,
+			"value-default": 0
+		},
+		{
+			"control": "itemSelect",
+			"name": "npc",
+			"title": "NPC",
+			"type": "npc",
+			"tooltip": "The NPC spawned once this spawner is triggered.",
+			"value-default": 973
+		},
+		{
+			"control": "spinBox",
+			"name": "delay",
+			"title": "Delay",
+			"tooltip": "Delay between NPC spawns.",
+			"type": "int",
+			"value-min": 1,
+			"value-max": 999,
+			"value-default": 20
+		},
+		{
+			"control": "checkbox",
+			"name": "enabled",
+			"title": "Enabled",
+			"tooltip": "When disabled, this spawner will instead disable any existing effects of this kind.",
+			"text-visible": false,
+			"value-default": true
+		}
+	]
+}
+
