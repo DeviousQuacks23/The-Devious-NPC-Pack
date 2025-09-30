@@ -2,6 +2,8 @@ local npcManager = require("npcManager")
 local npcutils = require("npcs/npcutils")
 local easing = require("ext/easing")
 
+-- Sprites by Mister Mike
+
 local blarggs = {}
 
 local IDLE = 0

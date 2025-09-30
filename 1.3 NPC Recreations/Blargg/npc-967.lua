@@ -85,6 +85,7 @@ local blarggSettings = {
 }
 
 npcManager.setNpcSettings(blarggSettings)
+npcManager.registerDefines(npcID, {NPC.UNHITTABLE})
 
 AI.register(npcID)
 
