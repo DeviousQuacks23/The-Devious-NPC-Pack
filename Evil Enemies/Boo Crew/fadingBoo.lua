@@ -9,6 +9,7 @@ local SWOOP = 2
 
 function fadingBoos.register(npcID)
 	npcManager.registerEvent(npcID, fadingBoos, "onTickNPC")
+	npcManager.registerEvent(npcID, fadingBoos, "onTickEndNPC")
     	npcManager.registerEvent(npcID, fadingBoos, "onDrawNPC")
 end
 
@@ -47,6 +48,19 @@ local function init(v, data, config)
         data.divePlayerPosition = nil
 end
 
+function fadingBoos.onTickEndNPC(v)
+	if Defines.levelFreeze then return end
+	
+	local data = v.data
+        local config = NPC.config[v.id]
+
+	if not data.initialized then
+		init(v, data, config)
+	end
+
+	animationHandling(v, data, config)
+end
+
 function fadingBoos.onTickNPC(v)
 	if Defines.levelFreeze then return end
 	
@@ -61,8 +75,6 @@ function fadingBoos.onTickNPC(v)
 	if not data.initialized then
 		init(v, data, config)
 	end
-
-	animationHandling(v, data, config)
 
 	if v.isProjectile then v.isProjectile = false end
 	if v.heldIndex ~= 0 or v.forcedState > 0 then return end
