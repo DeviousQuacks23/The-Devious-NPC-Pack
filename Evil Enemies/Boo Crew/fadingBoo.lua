@@ -8,7 +8,7 @@ local PRESWOOP = 1
 local SWOOP = 2
 
 function fadingBoos.register(npcID)
-	npcManager.registerEvent(npcID, fadingBoos, "onTickEndNPC")
+	npcManager.registerEvent(npcID, fadingBoos, "onTickNPC")
     	npcManager.registerEvent(npcID, fadingBoos, "onDrawNPC")
 end
 
@@ -47,7 +47,7 @@ local function init(v, data, config)
         data.divePlayerPosition = nil
 end
 
-function fadingBoos.onTickEndNPC(v)
+function fadingBoos.onTickNPC(v)
 	if Defines.levelFreeze then return end
 	
 	local data = v.data
