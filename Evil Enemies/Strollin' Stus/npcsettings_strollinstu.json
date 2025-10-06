@@ -1,0 +1,17 @@
+{
+	"style" : "groupbox",
+	"title" : "Strollin' Stu Settings",
+	"layout": [
+		{
+			"control": "spinbox",
+			"name": "scale",
+			"title": "Scale:",
+			"type": "double",
+			"value-default": 1,
+			"value-min": 0.5,
+			"value-max": 5,
+			"single-step": 0.25,
+			"decimals": 2
+		}
+	]
+}

@@ -78,8 +78,6 @@ local broozerSettings = {
 	blockBreakSpeedMod = 0.05,
 	npcBruiseSpeedMod = 0.75,
 
-	breakableBlocks = {2, 4, 5, 60, 88, 89, 90, 115, 186, 188, 192, 193, 224, 225, 226, 293, 526, 668, 682, 683, 694, 457, 280, 1375, 1374},
-
 	hurtFrames = 4,
 	hurtTime = 70,
 	jumpHurtSpeed = 3,
@@ -290,7 +288,7 @@ function broozer.onTickEndNPC(v)
 		end
 
 		for _, b in ipairs(Block.getIntersecting(v.x + v.speedX, v.y, v.x + v.width + v.speedX, v.y + v.height)) do
-			if not b.isHidden and not b.layerObj.isHidden and b.layerName ~= "Destroyed Blocks" and b:mem(0x5A, FIELD_WORD) ~= -1 and (Block.MEGA_SMASH_MAP[b.id] or config.breakableBlocks[b.id]) and v.speedX ~= 0 then 
+			if not b.isHidden and not b.layerObj.isHidden and b.layerName ~= "Destroyed Blocks" and b:mem(0x5A, FIELD_WORD) ~= -1 and Block.MEGA_SMASH_MAP[b.id] and v.speedX ~= 0 then 
 				b:remove(true)
 				SFX.play(3)
 				v.speedX = v.speedX * config.blockBreakSpeedMod
