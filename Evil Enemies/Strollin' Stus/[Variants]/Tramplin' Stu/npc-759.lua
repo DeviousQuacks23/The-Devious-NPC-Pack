@@ -195,6 +195,7 @@ function sampleNPC.onTickEndNPC(v)
 	if not data.initialized then
 		--Initialize necessary data.
 		data.initialized = true
+		v.collisionGroup = "Tramplin' Stu"
 		data.timer = 0
 		data.state = STATE_PATROL
 		data.hurt = Colliders.Box(v.x, v.y, v.width, 96)
@@ -207,6 +208,8 @@ function sampleNPC.onTickEndNPC(v)
 	end
 	
 	data.timer = data.timer + 1
+	
+	Misc.groupsCollide["Tramplin' Stu"]["Tramplin' Stu NPCs"] = false
 	
 	data.push.x = v.x + v.width * 0.5
 	data.push.y = v.y + v.height * 0.25
@@ -281,6 +284,7 @@ function sampleNPC.onTickEndNPC(v)
 			local n = NPC.spawn(npcID + 1, v.x + v.width * 0.5 + eggOffset[v.direction], v.y + v.height * 0.5)
 			n.speedX = 2 * -v.direction
 			n.ai1 = RNG.irandomEntry{v.data._settings.spawnedNPC1, v.data._settings.spawnedNPC2}
+			n.collisionGroup = "Tramplin' Stu NPCs"
 			if n.ai1 == 0 then n.ai1 = 1 end
 		end
 	else

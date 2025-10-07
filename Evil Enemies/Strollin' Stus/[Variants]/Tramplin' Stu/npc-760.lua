@@ -91,6 +91,7 @@ function sampleNPC.onTickEndNPC(v)
 				local n = NPC.spawn(v.ai1, v.x, v.y, player.section, false)
 				n.direction = v.direction
 				n.friendly = v.friendly
+				n.collisionGroup = v.collisionGroup
 			end
 		end
 	end
