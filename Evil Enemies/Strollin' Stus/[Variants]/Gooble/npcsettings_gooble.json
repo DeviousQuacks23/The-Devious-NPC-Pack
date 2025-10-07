@@ -1,0 +1,30 @@
+{
+	"style" : "groupbox",
+	"title" : "Gooble Settings",
+	"layout": [
+	
+		{
+			"control": "combobox",
+			"name": "color",
+			"title": "Color",
+			"elements": ["Orange", "Red", "Yellow", "Green", "Blue", "Light Blue", "Purple"],
+			"value-default": 0
+		},
+		{
+			"control": "checkbox",
+			"name": "random",
+			"title": "Random Colour",
+			"tooltip": "Check to make the gooble be of a random colour.",
+			"text-visible": true,
+			"value-default": false
+		},
+		{
+			"control": "checkbox",
+			"name": "leap",
+			"title": "Dies when leaping?",
+			"tooltip": "Check to have the NPC get killed after it jumps at the player.",
+			"text-visible": true,
+			"value-default": true
+		}
+		]
+}

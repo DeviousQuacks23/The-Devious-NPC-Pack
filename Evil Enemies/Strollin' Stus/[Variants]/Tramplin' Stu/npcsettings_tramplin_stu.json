@@ -1,0 +1,31 @@
+{
+	"style" : "groupbox",
+	"title" : "Tramplin' Stu Settings",
+	"layout": [
+		{
+			"control": "checkbox",
+			"name": "spawns",
+			"title": "Spawns Eggs?",
+			"tooltip": "Check to have the NPC spawn eggs when running.",
+			"text-visible": true,
+			"value-default": true
+		},
+		{
+			"control": "itemSelect",
+			"name": "spawnedNPC1",
+			"title": "NPC to spawn",
+			"tooltip": "NPC to spawn out of the eggs.",
+			"type": "npc",
+			"value-default": 0
+		},
+		
+		{
+			"control": "itemSelect",
+			"name": "spawnedNPC2",
+			"title": "NPC to spawn",
+			"tooltip": "Another NPC to spawn out of the eggs. Also required.",
+			"type": "npc",
+			"value-default": 0
+		}
+	]
+}
