@@ -157,6 +157,8 @@ function sampleNPC.onTickEndNPC(v)
 		-- return
 	end
 	
+	if data.state ~= STATE_CHASE then data.speedX = 0 end
+	
 	data.timer = data.timer + 1
 	data.squish = math.clamp((data.squish or 0) - 1, 0, 32)
 	
@@ -164,7 +166,7 @@ function sampleNPC.onTickEndNPC(v)
 		if yiYoshi and p.character == CHARACTER_KLONOA then
 		
 			if not forcedPlayerStates(p) then
-				if (Colliders.collide(p, v) and not v.friendly and p:mem(0x140, FIELD_WORD) <= 0) and (not data.noHurtYet or data.noHurtYet <= 0) then
+				if (Colliders.collide(p, v) and not v.friendly and p:mem(0x140, FIELD_WORD) <= 0) and (not data.noHurtYet or data.noHurtYet <= 0) and NPC.config[v.id].isBandit then
 					--Nab the baby!
 					if data.HasBaby == 0 and yiYoshi.playerData.babyMario.state == 0 and not p:isInvincible() and not v.friendly and not v.isProjectile and v:mem(0x12C, FIELD_WORD) == 0 then
 						data.HasBaby = 1
@@ -277,7 +279,8 @@ function sampleNPC.onTickEndNPC(v)
 		
 			--Chase the player and start the actual attack
 			chasePlayers(v)
-			v.speedX = math.clamp(v.speedX + NPC.config[v.id].chaseAccuracy * v.data._basegame.direction, -NPC.config[v.id].chaseSpeed, NPC.config[v.id].chaseSpeed)
+			data.speedX = math.clamp(data.speedX + NPC.config[v.id].chaseAccuracy * v.data._basegame.direction, -NPC.config[v.id].chaseSpeed, NPC.config[v.id].chaseSpeed)
+			v.speedX = data.speedX
 			
 			if data.timer >= NPC.config[v.id].chaseTime then
 			
