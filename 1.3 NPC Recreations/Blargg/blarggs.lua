@@ -99,7 +99,7 @@ function blarggs.onTickNPC(v)
 		if v.y > (v.spawnY + v.height + config.leapDespawnOffset) then
 			data.scale = math.max(0, data.scale - config.shrinkSpeed)
 			if data.scale <= 0 then
-				v:mem(0x124,FIELD_BOOL, false)
+				v:mem(0x124,FIELD_BOOL, true)
 				v.despawnTimer = 0
 			end
 		end
