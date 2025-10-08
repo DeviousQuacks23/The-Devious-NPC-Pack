@@ -1,0 +1,33 @@
+{
+	"style" : "groupbox",
+	"title" : "Flip Panel Activator Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"name": "index",
+			"title" : "Index",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 9999,
+			"type": "int"
+		},
+		{
+			"control": "spinBox",
+			"name": "panelFlipTime",
+			"title" : "Panel Flip Delay",
+			"value-default": 25,
+			"value-min": 1,
+			"value-max": 500,
+			"type": "int"
+		},
+		{
+			"control": "spinBox",
+			"name": "panelLifetime",
+			"title" : "Panel Lifetime",
+			"value-default": 400,
+			"value-min": 1,
+			"value-max": 10000,
+			"type": "int"
+		}
+	]
+}
