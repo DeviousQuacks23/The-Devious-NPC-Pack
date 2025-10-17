@@ -37,9 +37,9 @@ end
 local function getPlayerPushing(v)
 	for _,p in ipairs(Player.get()) do
 		if p.forcedState == FORCEDSTATE_NONE and p.deathTimer == 0 then
-			if Colliders.collide(p, Colliders.Box(v.x + 2, v.y, v.width, v.height)) and p.keys.left then
+			if Colliders.collide(p, Colliders.Box(v.x + 2, v.y - 2, v.width, v.height)) and p.keys.left then
 				return -1
-			elseif Colliders.collide(p, Colliders.Box(v.x - 2, v.y, v.width, v.height)) and p.keys.right then
+			elseif Colliders.collide(p, Colliders.Box(v.x - 2, v.y - 2, v.width, v.height)) and p.keys.right then
 				return 1
 			end
 		end
