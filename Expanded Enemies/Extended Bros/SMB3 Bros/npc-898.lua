@@ -48,7 +48,7 @@ function hammer.onTickEndNPC(v)
 		data.rotation = 0
 	end
 
-	data.rotation = data.rotation + 15 * v.direction
+	data.rotation = data.rotation + (v.speedX * 4)
 end
 
 function hammer.onDrawNPC(v)
