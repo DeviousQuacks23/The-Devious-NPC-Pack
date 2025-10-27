@@ -1,22 +1,20 @@
 local npcManager = require("npcManager")
-local AI = require("corks")
+local AI = require("diggable")
 
 local cork = {}
 local npcID = NPC_ID
 
-local size = 64
-local corkEffect = 756
-
 local corkSettings = table.join({
 	id = npcID,
-	gfxheight = size,
-	gfxwidth = size,
-	width = size,
-	height = size,
-        effect = corkEffect,
-},AI.sharedSettings)
+
+	slashable = false,
+	explodable = false,
+        effect = 755,
+}, AI.sharedSettings)
 
 npcManager.setNpcSettings(corkSettings)
+npcManager.registerDefines(npcID, {NPC.UNHITTABLE})
+
 AI.register(npcID)
 
 return cork
