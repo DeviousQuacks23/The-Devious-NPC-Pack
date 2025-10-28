@@ -11,6 +11,7 @@ local sandSettings = table.join({
 	npcblocktop = true, 
 	playerblock = false, 
 
+        effect = 760,
 	effectSpeed = -2,
 	renderPriority = -64,
 }, AI.sharedSettings)

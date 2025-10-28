@@ -4,6 +4,7 @@ local playerManager = require("playerManager")
 
 -- Code taken from MDA's Subspace Door
 -- Diggable Sand sprites by Sednaiur
+-- Diggable Cloud sprites by Murphmario
 
 local diggable = {}
 
