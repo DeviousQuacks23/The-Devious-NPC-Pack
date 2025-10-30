@@ -24,8 +24,10 @@ end
 function eggspansionBlock.onBlockHit(event, v, fromUpper, p)
 	if v.id == BLOCK_ID then
 		event.cancelled = true
+
 		if not v.data.eggspanded then
 			SFX.play("expansionBlock.ogg")
+
 			v.data.eggspanded = true
 			v.data.hasBumped = false
 			v.data.timer = 300
@@ -40,6 +42,7 @@ function eggspansionBlock.onTickBlock(v)
 	
     	if not data.initialized then
     		data.initialized = true
+
 		data.spawnY = v.y
 		data.eggspanded = false
 		data.timer = 0
@@ -50,23 +53,23 @@ function eggspansionBlock.onTickBlock(v)
 
 	local oldHeight = v.height
 	local oldWidth = v.width
-	if not data.eggspanded then
-		if oldHeight ~= 32 then v.height = math.max(32, v.height - 2) end
-		if oldWidth ~= 32 then v.width = math.max(32, v.width - 2) end
-		v.y = math.min(data.spawnY, v.y + 2)
-	elseif data.eggspanded then
+
+	if data.eggspanded then
 		if data.timer <= 0 then data.eggspanded = false end
-		if oldHeight ~= 64 then v.height = math.min(64, v.height + 4) end
-		if oldWidth ~= 64 then v.width = math.min(64, v.width + 4) end
+		v:setSize(math.min(64, v.width + 4), math.min(64, v.height + 4))
+
 		if not data.hasBumped then
-			v.y = math.max(data.spawnY - 72, v.y - 4)
+			v:translate(0, math.max((data.spawnY - 72) - v.y, -4))
 			if v.y <= (data.spawnY - 72) then data.hasBumped = true end
 		else
-			v.y = math.min(data.spawnY - 64, v.y + 1)
+			v:translate(0, math.min((data.spawnY - 64) - v.y, 1))
 		end
+	else
+		v:setSize(math.max(32, v.width - 2), math.max(32, v.height - 2))
+		v:translate(0, math.min(data.spawnY - v.y, 2))
 	end
-	v.x = v.x + oldWidth / 2 - v.width / 2
-	v.y = v.y + oldHeight - v.height
+
+	v:translate(oldWidth / 2 - v.width / 2, oldHeight - v.height)
 end
 
 function eggspansionBlock.onCameraDrawBlock(v,camIdx)

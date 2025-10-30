@@ -1,5 +1,6 @@
 local blockManager = require("blockManager")
 local blockutils = require("blocks/blockutils")
+local easing = require("ext/easing")
 local redirector = require("redirector")
 
 -- Some help from Marioman2007
@@ -36,8 +37,10 @@ function directionalBlock.onBlockHit(event, v, fromUpper, p)
 	if data.canBump and not data.occupied and not data.disabled then
 		data.canBump = false
 		data.occupied = true
-		data.scale = 1.5
+		data.scalingUp = true
+
 		SFX.play(23)
+		SFX.play(2)
 
 		if data.direction == 0 then
 			data.goalY = v.y - 44
@@ -57,23 +60,39 @@ function directionalBlock.onTickBlock(v)
     	if not data.initialized then
     		data.initialized = true
 		data.direction = v.data._settings.dir
+
 		data.occupied = false
 		data.canBump = true
+		data.disabled = false
+
 		data.goalX = v.x
 		data.goalY = v.y
 		data.spawnX = v.x
 		data.spawnY = v.y
-		data.disabled = false
+
+		data.scale = 1
+		data.scaleTimer = 0
+		data.scalingUp = false
+	end
+
+	if data.scalingUp then
+		if data.scaleTimer < 5 then
+			data.scale = easing.outQuad(data.scaleTimer, 1, 1.5 - 1, 5)
+		else
+			data.scale = easing.inQuad(data.scaleTimer - 5, 1.5, 1 - 1.5, 5)
+		end
+		
+		
+		if data.scaleTimer >= 10 then
+			data.scalingUp = false
+			data.scale = 1
+		else
+			data.scaleTimer = data.scaleTimer + 1
+		end
+	else
+		data.scaleTimer = 0
 		data.scale = 1
 	end
-
-	for _, bgo in ipairs(BGO.getIntersecting(v.x, v.y, v.x + v.width, v.y + v.height)) do
-		if bgo.id == redirector.TERMINUS then 
-			data.disabled = true
-		end
-	end
-
-	if data.scale > 1 then data.scale = data.scale - 0.05 end
 
 	if data.occupied then
 		if data.direction == 0 then
@@ -101,7 +120,7 @@ function directionalBlock.onTickBlock(v)
 				data.occupied = false
 			end
 		end
-	elseif not data.occupied then
+	else
 		if data.direction == 0 then
 			v:translate(0, math.min(data.spawnY - v.y, 2))
 
@@ -119,6 +138,14 @@ function directionalBlock.onTickBlock(v)
 
 			if v.x == data.spawnX then
 				data.canBump = true
+			end
+		end
+
+		if data.canBump then
+			for _, bgo in ipairs(BGO.getIntersecting(v.x, v.y, v.x + v.width, v.y + v.height)) do
+				if bgo.id == redirector.TERMINUS then 
+					data.disabled = true
+				end
 			end
 		end
 	end
