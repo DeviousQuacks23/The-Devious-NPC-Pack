@@ -116,7 +116,7 @@ function jumpOrb.onTickEndNPC(v)
 	if v.heldIndex ~= 0 or v.forcedState > 0 then return end
 
         for k,p in ipairs(Player.get()) do
-                if Colliders.collide(data.range,p) and Misc.canCollideWith(v, p) then
+                if Colliders.speedCollide(data.range,p) and Misc.canCollideWith(v, p) then
                         if not data.hasEffected then
 	                        table.insert(ringEffects, {
 			                x = v.x + v.width/2, 
@@ -131,6 +131,7 @@ function jumpOrb.onTickEndNPC(v)
                                 data.scale = 2
                                 data.cooldown = 20
 	                        SFX.play("orb.ogg")
+				p:mem(0x11C, FIELD_WORD, 0)
 			        p.speedY = cfg.bounceHeight
 	                        table.insert(bounceEffects, {
 			                x = v.x + v.width/2, 
