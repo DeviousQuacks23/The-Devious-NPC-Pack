@@ -8,7 +8,7 @@ local lineguide = require("lineguide")
 local firebar = {}
 
 function firebar.register(npcID)
-	npcManager.registerEvent(npcID, firebar, "onTickEndNPC")
+	npcManager.registerEvent(npcID, firebar, "onTickNPC")
 	lineguide.registerNpcs(npcID)
 end
 
@@ -40,7 +40,7 @@ local function spawnNPC(v, id, data, settings)
 	return n
 end
 
-function firebar.onTickEndNPC(v)
+function firebar.onTickNPC(v)
 	if Defines.levelFreeze then return end
 	
 	local data = v.data
