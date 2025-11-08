@@ -44,6 +44,7 @@ local moneybagSettings = {
 	-- Custom Properties
 
 	health = 6,
+	stompCooldown = 20,
 
 	jumpCooldown = 10,
 	jumpSpeedX = 5,
@@ -198,6 +199,10 @@ function moneybag.onNPCHarm(e, v, r, c)
 			SFX.play(9)
 			if c then Effect.spawn(75, c) end
 			spitACoin(v, cfg)
+
+			if r == 1 then
+				data.volleyCooldown = cfg.stompCooldown
+			end
 		end
 	end
 end
