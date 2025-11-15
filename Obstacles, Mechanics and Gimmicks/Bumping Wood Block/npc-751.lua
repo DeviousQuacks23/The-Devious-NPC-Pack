@@ -130,40 +130,30 @@ function trollWoodBlock.onTickEndNPC(v)
 						data.offsetGoal = 12
 						p.speedX = -4
 						for _, npc in ipairs(Colliders.getColliding{a = data.enemyColliderRight, b = NPC.HITTABLE, btype = Colliders.NPC}) do npc:harm(HARM_TYPE_TAIL) end
-						if not data.releasedContainer then
-							if v.ai1 > 0 then
-								data.releasedContainer = true
-								SFX.play(7)
-	                                			local n = NPC.spawn(v.ai1, v.x, v.y + (v.height * 0.5), v.section)
-								n.y = n.y - (n.height * 0.5)
-								n.forcedState = 4
-								n.forcedCounter1 = v.x + v.width
-								n.forcedCounter2 = 4
-                     	                			n.layerName = "Spawned NPCs"
-        	                        			n.friendly = v.friendly
-							end
-	                        		end
+
 					elseif Colliders.collide(data.bumpColliderRight, p) then
 						data.offsetGoal = -12
 						p.speedX = 4
 						for _, npc in ipairs(Colliders.getColliding{a = data.enemyColliderLeft, b = NPC.HITTABLE, btype = Colliders.NPC}) do npc:harm(HARM_TYPE_TAIL) end
-						if not data.releasedContainer then
-							if v.ai1 > 0 then
-								data.releasedContainer = true
-								SFX.play(7)
-	                                			local n = NPC.spawn(v.ai1, v.x, v.y + (v.height * 0.5), v.section)
-								n.y = n.y - (n.height * 0.5)
-								n.forcedState = 4
-								n.forcedCounter1 = v.x
-								n.forcedCounter2 = 2
-                     	                			n.layerName = "Spawned NPCs"
-        	                        			n.friendly = v.friendly
-							end
-	                        		end
 					end
 					data.occupiedOffset = true
 					data.cooldown = 12
 					SFX.play(3)
+
+					if not data.releasedContainer then
+						if v.ai1 > 0 then
+							data.releasedContainer = true
+							SFX.play(7)
+	                                		local n = NPC.spawn(v.ai1, v.x + (v.width * 0.5), v.y, v.section)
+							n.x = n.x - (n.width * 0.5)
+							n.height = 0
+							n.forcedState = 1
+							n.direction = -1
+                     	                		n.layerName = "Spawned NPCs"
+        	                        		n.friendly = v.friendly
+						end
+	                        	end
+
 					break
 				end
 			end
