@@ -2,6 +2,7 @@ local npcManager = require("npcManager")
 local npcutils = require("npcs/npcutils")
 
 local wizzerds = {}
+-- Sprites by Teeks, tweaked by me
 
 wizzerds.sharedSettings = {
 	gfxwidth = 52,
