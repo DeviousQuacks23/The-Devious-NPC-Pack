@@ -1,0 +1,24 @@
+{
+	"style" : "groupbox",
+	"title" : "Coin Counter Block Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"name": "coinAmount",
+			"title": "Amount of coins",
+			"tooltip": "The amount of coins needed for the reward.",
+			"type": "int",
+			"value-min": 1,
+			"value-max": 999,
+			"value-default": 30
+		},
+		{
+			"control": "lineEdit",
+			"name": "rewardEvent",
+			"title": "Collected all coins event",
+			"tooltip": "The name of the event triggered when the player collects all required coins.",
+			"value-default": ""
+		}
+	]
+}
+
