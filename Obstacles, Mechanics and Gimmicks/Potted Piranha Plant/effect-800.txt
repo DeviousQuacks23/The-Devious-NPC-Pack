@@ -1,0 +1,15 @@
+[Plant]
+import=AI_ARC
+variants=2
+speedX=-5:5
+speedY=-6:-10
+variant=1
+
+[Pot]
+template=Plant
+variant=2
+rotation=-15:15
+xAlign=CENTER
+yAlign=CENTER
+spawnBindX=CENTER
+spawnBindY=CENTER
