@@ -1,0 +1,5 @@
+[first]
+import=AI_SINGLE
+frames=3
+framespeed=6
+gravity = 0.15
