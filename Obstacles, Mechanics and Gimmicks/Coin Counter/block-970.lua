@@ -40,6 +40,7 @@ local coinCounterSettings = {
 blockManager.setBlockSettings(coinCounterSettings)
 
 function coinCounter.onInitAPI()
+	blockManager.registerEvent(blockID, coinCounter, "onTickEndBlock")
 	registerEvent(coinCounter, "onBlockHit")
 	registerEvent(coinCounter, "onDraw")
 end
@@ -54,11 +55,16 @@ local eventToTrigger
 
 function coinCounter.onBlockHit(e, v, fromUpper, p)
 	if v.id == BLOCK_ID then
+		e.cancelled = true
+		v.data.letsTranformIntoAChallengeAndIHaveToDoThisOtherwiseTheGameWillError = true
+	end
+end
+
+function coinCounter.onTickEndBlock(v)
+	if v.data.letsTranformIntoAChallengeAndIHaveToDoThisOtherwiseTheGameWillError then
 		local cfg = Block.config[v.id]
 		local blockSettings = v.data._settings
 		local settings = coinCounter.hudSettings
-
-		e.cancelled = true
 
 		if not Misc.isPaused() then
 			if shouldRender then
