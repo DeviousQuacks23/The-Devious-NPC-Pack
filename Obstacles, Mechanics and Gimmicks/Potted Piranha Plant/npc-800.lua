@@ -72,7 +72,7 @@ local pottedPiranhaPlantSettings = {
 	mouthHeight = 32,
 
 	lungeSpeed = 0.2,
-	retractSpeed = 0.075,
+	retractSpeed = 0.15,
 	targetOffset = 8,
 
 	killOneAtATime = true,
@@ -142,7 +142,7 @@ local function init(v, data, config)
 		data.goalRotation = 0
 		data.startLocation = vector(v.x + (v.width * 0.5), (v.y - config.mouthOffsetY))
 		data.mouthLocation = data.startLocation
-		data.lastMouthLocation = vector(0, 0)
+		data.lastMouthLocation = nil
 		data.speed = vector(0, 0)
 		data.targetLocation = vector(0, 0)
 		data.stallTimer = 0
@@ -199,13 +199,12 @@ function pottedPiranhaPlant.onTickNPC(v)
         data.visionCollider[v.direction].x = v.x + (v.width * 0.5)
 	data.visionCollider[v.direction].y = v.y + 0.5 * v.height
 
-	if data.stallTimer <= 0 then
+	if data.lastMouthLocation and data.stallTimer <= 0 then
 		data.speed.x = data.mouthLocation.x - data.lastMouthLocation.x
 		data.speed.y = data.mouthLocation.y - data.lastMouthLocation.y
 	end
 
-	data.lastMouthLocation.x = data.mouthLocation.x
-	data.lastMouthLocation.y = data.mouthLocation.y
+	data.lastMouthLocation = vector(data.mouthLocation.x, data.mouthLocation.y)
 	data.animTimer = data.animTimer + 1
 
 	if v.isProjectile or v.forcedState > 0 then retractBack(v, data, config) return end
