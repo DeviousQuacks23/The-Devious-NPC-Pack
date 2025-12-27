@@ -235,6 +235,8 @@ function pokeys.registerBody(npcID)
     	pokeys.bodyIDMap[npcID] = true
 end
 
+Misc.groupsCollide["pokeySegments"][""] = false -- Disable collision
+
 function pokeys.onTickBody(v)
 	if Defines.levelFreeze then return end
 	
@@ -251,14 +253,17 @@ function pokeys.onTickBody(v)
 	-- Projectile stuff
 
 	if v.isProjectile then 
-		v.collisionGroup = "pokeySegments"
-		Misc.groupsCollide["pokeySegments"][""] = false -- Disable collision
+		if v.collisionGroup ~= "pokeySegments" then
+			v.collisionGroup = "pokeySegments"
+		end
 
 		-- Since we disabled collision, we'll have to re-add projectile logic
             	for _,n in ipairs(NPC.getIntersecting(v.x + 8, v.y + 8, v.x + v.width - 8, v.y + v.height - 8)) do
             		if n.idx ~= v.idx and not n.isHidden and not n.friendly and not v.friendly and NPC.HITTABLE_MAP[n.id] then
                     		n:harm(3)
 		    		v:harm(4)
+
+				break
             		end
 	    	end
 	end

@@ -77,7 +77,7 @@ local pokeySettings = {
 }
 
 npcManager.setNpcSettings(pokeySettings)
-npcManager.registerHarmTypes(npcID,{},{})
+npcManager.registerHarmTypes(npcID,{2},{})
 
 pokeys.registerManager(npcID)
 
