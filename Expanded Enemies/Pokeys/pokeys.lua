@@ -263,7 +263,7 @@ function pokeys.onTickBody(v)
                     		n:harm(3)
 		    		v:harm(4)
 
-				break
+				-- break
             		end
 	    	end
 	end
