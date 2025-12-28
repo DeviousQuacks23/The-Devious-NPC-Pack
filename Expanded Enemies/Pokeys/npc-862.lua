@@ -65,7 +65,7 @@ local pokeySettings = {
 	-- Custom settings
 
 	bodyID = bodyID,
-	segmentGap = 32,
+	segmentGap = 30,
 
 	toppleIfHeadless = false,
 	toppleTime = 8,

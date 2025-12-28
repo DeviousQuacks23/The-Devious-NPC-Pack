@@ -274,11 +274,7 @@ function pokeys.onTickBody(v)
         	data.waveTimer = data.waveTimer + 1
 
         	if config.rotate then 
-			if (data.bodyIndex % 2 == 0) then -- Even number
-	    			data.rotation = math.sin((data.waveTimer / 24) * math.pi) * 12
-			else
-	    			data.rotation = -math.sin((data.waveTimer / 24) * math.pi) * 12
-			end
+			data.rotation = -math.sin(data.waveTimer/48*math.pi)*22.5/(manager.data.activeBodyCount - data.bodyIndex + 1)
 		end
 
         	data.animationTimer = data.animationTimer + 1
