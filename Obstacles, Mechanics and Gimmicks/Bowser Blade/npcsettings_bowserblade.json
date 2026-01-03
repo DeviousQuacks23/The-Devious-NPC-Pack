@@ -1,0 +1,49 @@
+{
+	"style" : "groupbox",
+	"title" : "Bowser Blade Settings",	
+	"layout": [
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "moveTime",
+			"title": "Move Time",
+			"tooltip": "How long the blade will move for (in ticks).",
+			"value-default": 100,
+			"value-min": 0,
+			"value-max": 500
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "stillTime",
+			"title": "Still Time",
+			"tooltip": "How long the blade will stay still for (in ticks).",
+			"value-default": 50,
+			"value-min": 0,
+			"value-max": 500
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "bladeSpeed",
+			"title": "Speed",
+			"tooltip": "The speed of the blade. Use negative numbers for going the opposite direction.",
+			"value-default": 2,
+			"value-min": -20,
+			"value-max": 20
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "retractedScale",
+			"title": "Scale When Retracted",
+			"tooltip": "The scale of the blade when it is retracted. Keep in mind that setting the scale to 0 does NOT make the blade friendly, unlike piranha plants.",
+			"value-default": 0.5,
+			"value-min": 0,
+			"value-max": 1,
+			"single-step": 0.05,
+			"decimals": 2
+		}
+	]
+	
+}
