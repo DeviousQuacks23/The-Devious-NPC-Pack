@@ -39,6 +39,81 @@ function tipsyTurtleShell.onInitAPI()
 	npcManager.registerEvent(npcID, tipsyTurtleShell, "onDrawNPC")
 end
 
+-- Taken directly from seesaw AI
+
+local function getObjectsOnPlatform(v) -- Get any objects standing on this platform
+    local data = v.data
+
+    local objects = {}
+
+    if data.block and data.block.isValid then -- Only do this if we have a block
+        if Block.config[data.block.id].floorslope == 0 then -- Platform does not have a slope
+            local x1,y1,x2,y2 = (data.block.x),(data.block.y-1),(data.block.x+data.block.width),(data.block.y)
+
+            for _,w in ipairs(table.append(Player.getIntersecting(x1,y1,x2,y2),NPC.getIntersecting(x1,y1,x2,y2))) do
+                if (w.__type == "Player" and w:mem(0x146,FIELD_WORD) > 0) or (w.__type == "NPC" and w.collidesBlockBottom) then -- The object is probably standing on that block
+                    table.insert(objects,w)
+                end
+            end
+        else -- Platform has a slope
+            for _,w in ipairs(table.append(Player.get(),NPC.get())) do
+                if (w.__type == "Player" and w:mem(0x48,FIELD_WORD) == data.block.idx) or (w.__type == "NPC" and w:mem(0x22,FIELD_WORD) == data.block.idx) then -- The object is standing on the slope
+                    table.insert(objects,w)
+                end
+            end
+        end
+    end
+
+    return objects
+end
+
+local function rotateTo(v,angle)
+    local data = v.data
+
+    -- Apply rotation to any objects on the platform
+    local difference = (angle-data.rotation)
+
+    for _,w in ipairs(getObjectsOnPlatform(v)) do
+        local distance = vector((v.x+(v.width*0.5))-(w.x+(w.width/2)),(v.y)-(w.y+w.height))
+
+        if math.abs(angle) > 60 then -- yeet everything off
+            w.speedX = (math.sign(distance.x)*-3)
+            w.soeedY = -4
+        else
+            -- Keep track of the original position for later
+            local originalPosition = vector(w.x,w.y)
+
+            -- Rotate the object with the platform
+            distance = distance:rotate(difference)
+
+            w.x = v.x+v.speedX+(v.width*0.5)-distance.x-(w.width/2)
+            w.y = v.y+v.speedY                         -distance.y-(w.height )
+
+            if w.__type == "NPC" then
+                w.speedY = 0
+            else
+                --w:mem(0x146,FIELD_WORD,0)
+            end
+
+            -- If this new position would cause the object to collide with something
+            local idList = Block.SOLID
+            if w.__type == "Player" then
+                idList = idList.. Block.PLAYERSOLID
+            else
+                idList = idList.. Block.PLAYER
+            end
+
+            if #Colliders.getColliding{a = w,b = idList,btype = Colliders.BLOCK} > 0 then
+                -- Go back to the original position
+                w.x = originalPosition.x-w.speedX
+                w.y = originalPosition.y-w.speedY
+            end
+        end
+    end
+
+    data.rotation = angle
+end
+
 function tipsyTurtleShell.onTickNPC(v)
 	if Defines.levelFreeze then return end
 
@@ -106,8 +181,8 @@ function tipsyTurtleShell.onTickNPC(v)
         	data.block.height = v.height
     	end
 
-    	local x = math.min(v.x+leftWidth+left.x,v.x+leftWidth+right.x)
-    	local y = math.min(v.y+left.y,v.y+right.y)+0.25
+    	local x = math.min(v.x+leftWidth+left.x,v.x+leftWidth+right.x) + (data.rotation * 2.5)
+    	local y = (math.min(v.y+left.y,v.y+right.y)+0.25) + (math.abs(data.rotation) * 0.5)
 
     	if data.block.x ~= x or data.block.y ~= y then
         	data.block:translate(x-data.block.x,y-data.block.y)
@@ -123,7 +198,7 @@ function tipsyTurtleShell.onTickNPC(v)
 			data.timer = 0
 		end
 	elseif data.state == 1 then
-		data.rotation = data.rotation + 0.5
+		rotateTo(v, math.min(22.5, data.rotation + 0.5))
 		if data.rotation >= 22.5 then
 			data.state = 2
 			data.timer = 0
@@ -134,7 +209,7 @@ function tipsyTurtleShell.onTickNPC(v)
 			data.timer = 0
 		end
 	elseif data.state == 3 then
-		data.rotation = data.rotation - 0.5
+		rotateTo(v, math.max(-22.5, data.rotation - 0.5))
 		if data.rotation <= -22.5 then
 			data.state = 0
 			data.timer = 0
@@ -177,20 +252,26 @@ function tipsyTurtleShell.onDrawNPC(v)
 	local config = NPC.config[v.id]
 	local data = v.data
 
-	if v:mem(0x12A,FIELD_WORD) <= 0 or not data.rotation or data.rotation == 0 then return end
+	local x,y,w,h = v.x, v.y, v.width, v.height
+
+	if data.block then
+		-- Colliders.getHitbox(data.block):Draw()
+	end
+
+	if v:mem(0x12A,FIELD_WORD) <= 0 or v.isHidden then return end
 
 	local priority = -76
 
 	drawSprite{
 		texture = Graphics.sprites.npc[v.id].img,
 
-		x = v.x+(v.width/2)+config.gfxoffsetx,y = v.y+v.height-(config.gfxheight/2)+config.gfxoffsety,
+		x = x+(w/2)+config.gfxoffsetx,y = y+h-(config.gfxheight/2)+config.gfxoffsety,
 		width = config.gfxwidth,height = config.gfxheight,
 
 		sourceX = 0,sourceY = v.animationFrame*config.gfxheight,
 		sourceWidth = config.gfxwidth,sourceHeight = config.gfxheight,
 
-		priority = priority,rotation = data.rotation,
+		priority = priority,rotation = data.rotation or 0,
 		pivot = Sprite.align.CENTRE,sceneCoords = true,
 	}
 
