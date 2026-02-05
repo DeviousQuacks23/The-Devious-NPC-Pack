@@ -190,7 +190,16 @@ function tipsyTurtleShell.onTickNPC(v)
 
 	-- The actual rotation stuff
 
-	data.timer = data.timer + 1
+	local dontRotate = false
+	local validForcedStates = {0, 3, 9, 10}
+
+	for _,p in ipairs(Player.get()) do
+		if not validForcedStates[p.forcedState] then
+			dontRotate = true
+		end
+	end
+
+	if not dontRotate then data.timer = data.timer + 1 end
 
 	if data.state == 0 then
 		if data.timer >= 75 then
@@ -198,7 +207,7 @@ function tipsyTurtleShell.onTickNPC(v)
 			data.timer = 0
 		end
 	elseif data.state == 1 then
-		rotateTo(v, math.min(22.5, data.rotation + 0.5))
+		if not dontRotate then rotateTo(v, math.min(22.5, data.rotation + 0.5)) end
 		if data.rotation >= 22.5 then
 			data.state = 2
 			data.timer = 0
@@ -209,7 +218,7 @@ function tipsyTurtleShell.onTickNPC(v)
 			data.timer = 0
 		end
 	elseif data.state == 3 then
-		rotateTo(v, math.max(-22.5, data.rotation - 0.5))
+		if not dontRotate then rotateTo(v, math.max(-22.5, data.rotation - 0.5)) end
 		if data.rotation <= -22.5 then
 			data.state = 0
 			data.timer = 0
