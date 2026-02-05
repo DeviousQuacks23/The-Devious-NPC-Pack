@@ -194,7 +194,7 @@ function tipsyTurtleShell.onTickNPC(v)
 	local validForcedStates = {0, 3, 9, 10}
 
 	for _,p in ipairs(Player.get()) do
-		if not validForcedStates[p.forcedState] then
+		if not table.contains(validForcedStates, p.forcedState) then
 			dontRotate = true
 		end
 	end
