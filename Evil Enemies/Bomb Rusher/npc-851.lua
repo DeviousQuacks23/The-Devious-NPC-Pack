@@ -301,7 +301,7 @@ function bombRusher.onTickEndNPC(v)
 			if v.collidesBlockLeft or v.collidesBlockRight then explode(v, data, cfg) end
         		for _,p in ipairs(Player.getIntersecting(v.x - 2, v.y + 2, v.x + (v.width + 2), v.y + (v.height - 2))) do explode(v, data, cfg) end
 			for _,n in ipairs(NPC.getIntersecting(v.x - 2, v.y + 2, v.x + (v.width + 2), v.y + (v.height - 2))) do 
-				if n.idx ~= v.idx and not n.isProjectile and not n.isHidden and not n.friendly and NPC.HITTABLE_MAP[n.id] then
+				if n.idx ~= v.idx and not n.isProjectile and not n.isHidden and not n.friendly and not n.isGenerator and NPC.HITTABLE_MAP[n.id] then
 					explode(v, data, cfg) 
 				end
 			end
