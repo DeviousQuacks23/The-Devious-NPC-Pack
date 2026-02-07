@@ -62,7 +62,8 @@ local mechakoopaSettings = {
 	recoverTime = 585, -- How long the NPC is idle before transforming.
 	recoverFrames = 2,
 
-	deacceleration = 0.35,
+	deacceleration = 0.05,
+	deaccelerationGround = 0.35,
 	kickSpeedX = 6,
 	kickSpeedY = -2,
 

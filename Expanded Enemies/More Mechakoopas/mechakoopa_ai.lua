@@ -57,7 +57,7 @@ local function getAnimationFrame(v)
             f = math.min(knockedFrames-1,(math.floor(data.animationTimer/config.framespeed)))
         end
 
-	if config.recoverFrames > 0 then
+	if config.recoverFrames > 0 and (data.animationTimer > (knockedFrames * config.framespeed)) then
 	    if data.timer > (config.recoverTime*0.75) and data.timer < (config.recoverTime*0.95) then
 		f = (math.floor(data.timer/config.framespeed)%(config.recoverFrames)+(config.frames-config.recoverFrames))
 	    end
@@ -139,7 +139,11 @@ local function doLaserLogic(v,dangerous)
 	if config.laserKillsNPCs then
             for _,n in ipairs(NPC.getIntersecting(x,y,x+width,y+height)) do
             	if n.idx ~= v.idx and not n.isHidden and not n.friendly and NPC.HITTABLE_MAP[n.id] then
-                    n:mem(0x122,FIELD_WORD, 3)
+		    -- Taken from MrNameless's Blue Shell
+		    local oldScore = NPC.config[n.id].score
+		    NPC.config[n.id].score = 0
+		    n:harm(3)
+		    NPC.config[n.id].score = oldScore -- immediately changes the npc's score config back to normal 
             	end
 	    end
         end
@@ -426,6 +430,28 @@ function mechakoopa.onTickEndMechakoopa(v)
 	    end
         end
 
+	-- Deaccelerate
+
+	if v.collidesBlockBottom then
+            if v.speedX > 0 then
+                v.speedX = v.speedX - config.deaccelerationGround
+            elseif v.speedX < 0 then
+                v.speedX = v.speedX + config.deaccelerationGround
+            end
+            if v.speedX >= -config.deaccelerationGround and v.speedX <= config.deaccelerationGround then
+                v.speedX = 0
+            end
+	else
+            if v.speedX > 0 then
+                v.speedX = v.speedX - config.deacceleration
+            elseif v.speedX < 0 then
+                v.speedX = v.speedX + config.deacceleration
+            end
+            if v.speedX >= -config.deacceleration and v.speedX <= config.deacceleration then
+                v.speedX = 0
+            end
+	end
+
         -- Get knocked by players
         if v:mem(0x12C,FIELD_WORD) == 0 and v:mem(0x12E,FIELD_WORD) == 0 and not v.isProjectile then -- If not grabbed
             for _,w in ipairs(Player.getIntersecting(v.x,v.y,v.x+v.width,v.y+v.height)) do
@@ -442,18 +468,6 @@ function mechakoopa.onTickEndMechakoopa(v)
 		    end
                 end
             end
-
-            -- Deaccelerate
-	    if v.collidesBlockBottom then
-            	if v.speedX > 0 then
-                    v.speedX = v.speedX - config.deacceleration
-            	elseif v.speedX < 0 then
-                    v.speedX = v.speedX + config.deacceleration
-            	end
-            	if v.speedX >= -config.deacceleration and v.speedX <= config.deacceleration then
-                    v.speedX = 0
-            	end
-	    end
         end
     elseif data.state == STATE_WALK then
         if mechakoopa.typeMap[v.id] ~= mechakoopa.TYPE_NORMAL and n and playerDistance < config.attackDistance then
