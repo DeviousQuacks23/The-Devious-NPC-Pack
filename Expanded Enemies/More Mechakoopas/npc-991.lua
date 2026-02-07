@@ -35,7 +35,6 @@ local mechakoopaSettings = {
 	framespeed = 6,
 	
 	speed = 1,
-	score = 0,
 	
 	npcblock = false,
 	npcblocktop = false, --Misnomer, affects whether thrown NPCs bounce off the NPC.
