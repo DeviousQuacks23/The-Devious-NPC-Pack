@@ -91,6 +91,7 @@ local function rotateTo(v,angle)
 
             if w.__type == "NPC" then
                 w.speedY = 0
+		w.collidesBlockBottom = true
             else
                 --w:mem(0x146,FIELD_WORD,0)
             end
