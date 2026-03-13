@@ -319,7 +319,7 @@ function extendedGoombas.onNPCHarm(eventObj,v,reason,culprit)
                 SFX.play(9)
             elseif config.isWinged then
                 v:transform(config.normalID)
-                v.speedY = v.speedY / 4
+                if v.speedY < 0 then v.speedY = 0 end
                 SFX.play(config.wingStompSFX)
             elseif config.isStunned then
                 kickStunned(v,data,config,culprit)
