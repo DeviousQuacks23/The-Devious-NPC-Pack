@@ -57,8 +57,6 @@ local fireballSettings = {
 	durability = 2,
 
 	speed = 1.5,
-	minSpeedY = -1,
-	maxSpeedY = 1,
 }
 
 npcManager.setNpcSettings(fireballSettings)
@@ -76,7 +74,7 @@ local function homeIn(v,playerObj)
 
 
 	v.speedX = config.speed*math.sign(distance.x)
-	v.speedY = math.clamp((distance:normalise().y)*config.speed,config.minSpeedY,config.maxSpeedY)
+	v.speedY = (distance:normalise().y)*config.speed
 end
 
 

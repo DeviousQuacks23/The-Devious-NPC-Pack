@@ -100,7 +100,7 @@ function jumpOrb.onTickEndNPC(v)
 
 	data.range.x = v.x+v.width*0.5
 	data.range.y = v.y+v.height*0.5
-	data.range.radius = 16
+	data.range.radius = (((v.width + v.height) / 2) / 2)
 
         data.cooldown = data.cooldown - 1
 
