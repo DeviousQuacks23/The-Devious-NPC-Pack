@@ -50,3 +50,4 @@ drawnpcinfront - If enabled, the bro will render the projectile infront of itsel
 
 jumpSFX, quakeSFX, holdSFX, throwSFX - SFX configs. Can be false for none, a number for a vanilla sound, or a sound effect object/string for a custom sound.
 onThrowFunction - A custom function that can be used to modify the bro when it is throwing. Look at the Sniper Bro for an example.
+getProjectileFunction - A custom function that can be used to modify the projectile ID that is thrown. Overrides throwid and throwidheld.

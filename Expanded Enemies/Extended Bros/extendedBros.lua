@@ -82,6 +82,7 @@ function hammerBros.register(id)
 	setConfigDefault(config, "throwSFX", 25)
 
 	setConfigDefault(config, "onThrowFunction", nil)
+	setConfigDefault(config, "getProjectileFunction", nil)
 
 	configs[id] = config
 end
@@ -380,6 +381,10 @@ function hammerBros.onTickNPC(bro)
 				npcToThrow = config.throwid
 			end
 
+			if config.getProjectileFunction ~= nil then
+				npcToThrow = config.getProjectileFunction(bro, data, config)
+			end
+
 			data.throwingID = npcToThrow
 		end
 		data.isJumping = false
@@ -521,7 +526,12 @@ function hammerBros.onTickNPC(bro)
 
 		if data.throwTimer <= config.holdframes and data.throwingID == nil then
 			if config.holdSFX then SFX.play(config.holdSFX) end
-			data.throwingID = config.throwid
+
+			local npcToThrow = config.throwid
+			if config.getProjectileFunction ~= nil then
+				npcToThrow = config.getProjectileFunction(bro, data, config)
+			end
+			data.throwingID = npcToThrow
 		end
 	elseif data.throwingID ~= nil then
 		-- Fire a hammer and reset the hammer timer.
@@ -532,7 +542,12 @@ function hammerBros.onTickNPC(bro)
 		
 		if data.volleyCount < config.volley then
 			data.throwTimer = config.volleyframes
-			data.throwingID = config.throwid
+
+			local npcToThrow = config.throwid
+			if config.getProjectileFunction ~= nil then
+				npcToThrow = config.getProjectileFunction(bro, data, config)
+			end
+			data.throwingID = npcToThrow
 		else
 			data.volleyCount = 0
 		end
