@@ -51,5 +51,11 @@ drawheldnpc - If enabled, the bro will visually hold its projectile before throw
 drawnpcinfront - If enabled, the bro will render the projectile infront of itself, otherwise the projectile will be rendered from behind.
 
 jumpSFX, quakeSFX, holdSFX, throwSFX - SFX configs. Can be false for none, a number for a vanilla sound, or a sound effect object/string for a custom sound.
+
 onThrowFunction - A custom function that can be used to modify the bro when it is throwing. Look at the Sniper Bro for an example.
+To add this function to the bro, put this in the NPC's lua config:
+onThrowFunction = (function(bro, ham, data, config) end),
+
 getProjectileFunction - A custom function that can be used to modify the projectile ID that is thrown. Overrides throwid and throwidheld.
+To add this function to the bro, put this in the NPC's lua config:
+getProjectileFunction = (function(bro, data, config) end),

@@ -606,7 +606,11 @@ function hammerBros.onDrawNPC(bro)
 	end
 
 	-- taken from Murphmario's bros.lua
-	utils.restoreAnimation(bro)
+
+	if not config.disableanimation then
+		utils.restoreAnimation(bro)
+	end
+
 	walk = utils.getFrameByFramestyle(bro, {
 		frames = config.animwalkframes,
 		gap = config.animjumpframes + config.animholdframes + config.animshootframes,
