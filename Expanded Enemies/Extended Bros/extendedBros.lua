@@ -63,6 +63,7 @@ function hammerBros.register(id)
 	setConfigDefault(config, "brospeed", 0.8)
 	setConfigDefault(config, "movewhenjumping", false)
 	setConfigDefault(config, "movewhenshooting", true)
+	setConfigDefault(config, "shootonground", false)
 
 	setConfigDefault(config, "chaseplayer", false)
 	setConfigDefault(config, "followplayer", true)
@@ -431,6 +432,13 @@ function hammerBros.onTickNPC(bro)
 			data.walkTimer = data.walkTimer - 1
 		end
 
+		if not config.movewhenjumping then
+			if not bro.collidesBlockBottom then
+				bro.speedX = 0
+				bro:mem(0x5C, FIELD_FLOAT, 0)
+			end
+		end
+
 		if data.jumpTimer <= 0 and not data.isJumping and bro.collidesBlockBottom then
 			-- The bro performs a leap.
 			local jumpToOtherPlatform = false
@@ -462,11 +470,6 @@ function hammerBros.onTickNPC(bro)
 			end
 		elseif data.jumpTimer <= 0 and data.isJumping then
 			-- The bro has performed a large leap into the air.  Check to see if the bro has landed.
-			
-			if not config.movewhenjumping then
-				bro.speedX = 0
-				bro:mem(0x5C, FIELD_FLOAT, 0)
-			end
 
 			if data.isPerformingHighJump then
 				if data.isPerformingHighJump > 0 and bro.y + bro.height + bro.speedY + Defines.npc_grav >= data.targetY - bro.speedX then
@@ -522,7 +525,13 @@ function hammerBros.onTickNPC(bro)
 			data.jumpTimer = data.jumpTimer - 1
 		end
 
-		data.throwTimer = data.throwTimer - 1
+		if config.shootonground then
+			if (bro.collidesBlockBottom or data.throwingID ~= nil) then
+				data.throwTimer = data.throwTimer - 1
+			end
+		else
+			data.throwTimer = data.throwTimer - 1
+		end
 
 		if data.throwTimer <= config.holdframes and data.throwingID == nil then
 			if config.holdSFX then SFX.play(config.holdSFX) end
@@ -552,6 +561,10 @@ function hammerBros.onTickNPC(bro)
 			data.volleyCount = 0
 		end
 	end
+
+	-- Text.print(data.walkTimer, 0, 0)
+	-- Text.print(data.throwTimer, 0, 16)
+	-- Text.print(data.jumpTimer, 0, 32)
 end
 
 local utils = require("npcs/npcutils")
@@ -634,7 +647,7 @@ function hammerBros.onDrawNPC(bro)
 		if config.drawheldnpc then
 			drawHeldNPC(data.throwingID, bro.x - direction * config.holdoffsetx + bro.width / 2, bro.y + config.holdoffsety, direction, prio)
 		end
-	elseif data.isJumping and config.animjumpframes > 0 then
+	elseif (not bro.collidesBlockBottom) and config.animjumpframes > 0 then
 		bro.animationFrame = jump
 	else
 		bro.animationFrame = walk

@@ -35,6 +35,7 @@ quakeintensity - The earthquake intensity of a landing bro.
 brospeed - The movement speed of the bro.
 movewhenjumping - If enabled, the bro will move when jumping midair. Otherwise, the bro will stay still.
 movewhenshooting - If enabled, the bro will move when shooting. Otherwise, the bro will stay still.
+shootonground - If enabled, the bro will only be able to throw stuff if it is on the ground.
 
 chaseplayer - If enabled, the bro will chase the closest player instead of patrolling its area.
 followplayer - If enabled, the bro will always face the closest player. Otherwise, it will always face the direction it was placed in.
