@@ -73,6 +73,7 @@ function hammerBros.register(id)
 	setConfigDefault(config, "animholdframes", 2)
 	setConfigDefault(config, "animshootframes", 0)
 	setConfigDefault(config, "shootframeduration", 15)
+	setConfigDefault(config, "disableanimation", false)
 
 	setConfigDefault(config, "drawheldnpc", true)
 	setConfigDefault(config, "drawnpcinfront", true)
@@ -636,6 +637,16 @@ function hammerBros.onDrawNPC(bro)
 		prio = getRenderPriority(bro) + 1
 	else
 		prio = getRenderPriority(bro) - 1
+	end
+
+	if config.disableanimation then
+		if data.throwingID ~= nil and (data.throwAnimTimer <= 0 and config.animshootframes > 0) then
+			if config.drawheldnpc then
+				drawHeldNPC(data.throwingID, bro.x - direction * config.holdoffsetx + bro.width / 2, bro.y + config.holdoffsety, direction, prio)
+			end
+		end
+
+		return
 	end
 
 	-- If the hammer bro is about to fire a hammer, set its frame to the associated tossing sprite (adding index frames).

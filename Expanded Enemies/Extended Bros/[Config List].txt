@@ -45,6 +45,7 @@ animjumpframes - How many frames the bro will use when jumping. To disable, set 
 animholdframes - How many frames the bro will use when holding its projectile.
 animshootframes - How many frames the bro will use when shooting. To disable, set the config to 0.
 shootframeduration - The duration of the bro's shooting animation.
+disableanimation - If enabled, the built-in animation of the bro will be disabled entirely.
 
 drawheldnpc - If enabled, the bro will visually hold its projectile before throwing it.
 drawnpcinfront - If enabled, the bro will render the projectile infront of itself, otherwise the projectile will be rendered from behind.
