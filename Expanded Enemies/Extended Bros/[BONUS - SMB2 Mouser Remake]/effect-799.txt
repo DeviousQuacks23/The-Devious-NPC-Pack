@@ -1,0 +1,6 @@
+[1]
+import = AI_DROP
+framestyle = 1
+gravity = 0.25
+speedY = -6
+sound = 41
