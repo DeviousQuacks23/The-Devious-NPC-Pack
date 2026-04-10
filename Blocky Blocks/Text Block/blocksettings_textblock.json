@@ -10,6 +10,12 @@
 			"value-default": ""
 		},
 		{
+			"control": "checkbox",
+			"name": "noCulling",
+			"title": "Diasble Culling?",
+			"value-default": false
+		},
+		{
 			"control": "lineEdit",
 			"name": "fontSetting",
 			"title": "Font",

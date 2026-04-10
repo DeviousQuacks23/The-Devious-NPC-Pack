@@ -21,11 +21,12 @@ function textBlock.onInitAPI()
 end
 
 function textBlock.onCameraDrawBlock(v, camIdx)
-    	if not blockutils.visible(Camera(camIdx),v.x,v.y,v.width,v.height) or not blockutils.hiddenFilter(v) then return end
+    	if not blockutils.hiddenFilter(v) then return end
 	
 	local data = v.data
 	local settings = v.data._settings
 
+	if not blockutils.visible(Camera(camIdx),v.x,v.y,v.width,v.height) and not settings.noCulling then return end
 	if settings.theActualText == "" then return end
 
 	local tpFont
