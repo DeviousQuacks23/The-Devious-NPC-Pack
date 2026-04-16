@@ -40,10 +40,13 @@ magicBall.sharedSettings = {
 
         -- Custom Settings
 
+	ballSpeed = 1.5,
+
         startBounceHeight = -8,
         bounceModifier = 0.25,
         bounceLimit = -3.5,
 
+	bouncePlayerSpeed = 4,
         jumpHeight = -14,
 
         isExplosive = false,
@@ -52,7 +55,11 @@ magicBall.sharedSettings = {
         displayOutsideThing = false,
 
         rotate = true,
+	rotateSpeed = 7,
         squashAndStretch = true,
+
+	bounceSFX = "ball_bounce.ogg",
+	jumpSFX = "ball_jump.ogg",
 }
 
 local deathEffectID = (76)
@@ -85,7 +92,7 @@ function magicBall.onTickEndNPC(v)
 
 	if not data.initialized then
 		data.initialized = true
-                v.noblockcollision = false
+
 		data.height = cfg.startBounceHeight
                 data.rotation = 0
                 data.scaleX = 1
@@ -95,7 +102,7 @@ function magicBall.onTickEndNPC(v)
                 data.explodeOpacity = 0
 	end
 
-        if cfg.rotate then data.rotation = data.rotation + 10 * v.direction end
+        if cfg.rotate then data.rotation = data.rotation + (v.speedX * cfg.rotateSpeed) end
 
         if data.scaleX > 1 then 
                 data.scaleX = data.scaleX - 0.25
@@ -111,8 +118,6 @@ function magicBall.onTickEndNPC(v)
 
 	if v.heldIndex ~= 0  or v.forcedState > 0 then return end
         if v.isProjectile then v.isProjectile = false end
-
-        v.speedX = 1.5 * v.direction
 
         if not v.underwater then
                 v.speedY = v.speedY - 0.075
@@ -133,10 +138,11 @@ function magicBall.onTickEndNPC(v)
         end
 
         if v.collidesBlockBottom then
+        	v.speedX = cfg.ballSpeed * v.direction
                 v.speedY = data.height
-	        SFX.play("ball_bounce.ogg")
+	        if cfg.bounceSFX then SFX.play(cfg.bounceSFX) end
                 if data.height <= cfg.bounceLimit then
-	                data.height = data.height + cfg.bounceModifier
+	                data.height = math.min(cfg.bounceLimit, data.height + cfg.bounceModifier)
                 end
                 if cfg.squashAndStretch then
                         data.scaleX = 2
@@ -145,19 +151,24 @@ function magicBall.onTickEndNPC(v)
         end
 
 	if v.collidesBlockLeft or v.collidesBlockRight then
-	        SFX.play("ball_jump.ogg")
-		v.speedY = -6
+	        if cfg.jumpSFX then SFX.play(cfg.jumpSFX) end
+		v.speedX = 0
+		v.speedY = (cfg.startBounceHeight * 0.75)
                 v.noblockcollision = true 
                 if cfg.squashAndStretch then
                         data.scaleX = 0.5
                         data.scaleY = 1.5
                 end
+		if cfg.isExplosive then
+	                Explosion.spawn(v.x + 0.5 * v.width, v.y + 0.5 * v.height, 3)
+	                v:kill(9)
+		end
 	end
 
 	for _,p in ipairs(Player.getIntersecting(v.x,v.y,v.x + v.width,v.y + v.height)) do
 		if p.forcedState == FORCEDSTATE_NONE and p.deathTimer == 0 then
 			local distance = vector((p.x + p.width*0.5) - (v.x + v.width*0.5),(p.y + p.height*0.5) - (v.y + v.height*0.5))
-			SFX.play("ball_jump.ogg")
+			if cfg.jumpSFX then SFX.play(cfg.jumpSFX) end
                         if cfg.isExplosive then data.isExploding = true end
                         if cfg.squashAndStretch then
                                 data.scaleX = 1.5
@@ -167,8 +178,8 @@ function magicBall.onTickEndNPC(v)
                         if #Player.getIntersecting(v.x + 4, v.y - 4, v.x + v.width - 4, v.y + (v.height * 0.1)) ~= 0 and (p.keys.jump or p.keys.altJump) then
 			        p.speedY = cfg.jumpHeight
                         else
-			        p.speedX = (distance.x / v.width ) * 8
-			        p.speedY = (distance.y / v.height) * 4
+			        p.speedX = (distance.x / v.width ) * (cfg.bouncePlayerSpeed * 2)
+			        p.speedY = (distance.y / v.height) * cfg.bouncePlayerSpeed
                         end
 		end
 	end
