@@ -43,6 +43,10 @@ local movingPlatformSettings = {
 	staticdirection = true,
 	luahandlesspeed = true,
         terminalvelocity = -1,
+
+	getPlatformSkin = (function(v, data, config)
+		return v.ai2
+	end),
 }
 
 npcManager.setNpcSettings(movingPlatformSettings)

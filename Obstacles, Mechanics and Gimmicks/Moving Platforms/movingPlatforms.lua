@@ -327,7 +327,12 @@ function movingPlatform.onDrawNPC(v) -- taken from swinging platforms
             		sourceX = unitWidth
         	end
 
-        	Graphics.drawImageToSceneWP(image, math.floor(x + 0.5), math.floor(y + 0.5), sourceX + (v.ai2 * config.gfxwidth), sourceY, actualUnitWidth, config.gfxheight, priority)
+		local platSkin = 0
+		if config.getPlatformSkin ~= nil then
+			platSkin = config.getPlatformSkin(v, data, config)
+		end
+
+        	Graphics.drawImageToSceneWP(image, math.floor(x + 0.5), math.floor(y + 0.5), sourceX + (platSkin * config.gfxwidth), sourceY, actualUnitWidth, config.gfxheight, priority)
     	end
 
     	npcutils.hideNPC(v)
