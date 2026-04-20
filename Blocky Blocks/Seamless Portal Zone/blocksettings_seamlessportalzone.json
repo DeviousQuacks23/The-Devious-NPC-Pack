@@ -19,7 +19,20 @@
 		{
 			"control": "checkbox",
 			"name": "resetSpeed",
-			"title": "Should the player's speed be reset?",
+			"title": "Reset speed?",
+			"value-default": false
+		},
+		{
+			"control": "checkbox",
+			"name": "doWarpCooldown",
+			"title": "Add cooldown when teleported?",
+			"value-default": true
+		},
+		{
+			"control": "checkbox",
+			"name": "affectBG",
+			"title": "Sync BG with camera?",
+			"tooltip": "<b>VERY EXPERIMENTAL:</b> This may cause errors on some backgrounds! Use at your own risk.",
 			"value-default": false
 		}
 	]
