@@ -235,7 +235,7 @@ function glassBox.onPostNPCKill(v, reason)
 			local tagsInput = (item.advanced.tagsInput or "")
 		
 			local str = [[
-				return function(v, data, settings)
+				return function(v)
 					]] .. tagsInput .. [[
 				end
 			]]
@@ -251,7 +251,7 @@ function glassBox.onPostNPCKill(v, reason)
 			if chunk then
 				local func = chunk()
 			
-				func(n, n.data, n.data._settings)
+				func(n)
 			end
             	end
     	end
