@@ -61,14 +61,15 @@ angrySun.sharedSettings = ({
 	afterimageTrails = true,
 	afterimageColour = Color.orange,
 
-	horizontalDistance = 48,
-	verticalDistance = 32,
-	invertedMovement = false,
+	horizontalDistance = 64,
+	verticalDistance = 40,
+	cameraPosition = vector(0.9, 0.1),
 
 	accelerationRate = 1,
 	movementSpeed = 1,
 	loopLaps = 3,
 	swoopDistance = 0.75,
+	swoopSpeed = 1,
 	swoopDelay = 140,
 	stallDelay = 0,
 
@@ -153,7 +154,7 @@ function angrySun.onTickEndNPC(v)
 	end
 
 	if data.state == 0 then -- First spawned in
-		data.lerpGoalPos = vector(cam.x + 0.5 * cam.width + 0.4 * cam.width * v.direction, cam.y + cam.height * 0.5 - 0.4 * cam.height)
+		data.lerpGoalPos = vector(cam.x + 0.5 * cam.width - (0.5 - cfg.cameraPosition.x) * cam.width * v.direction, cam.y + cam.height * cfg.cameraPosition.y)
 		data.state = -1
 	elseif data.state == -1 then -- Go to the corner of the screen
 		data.lerpStartPos = data.lerpStartPos + camSpeed
@@ -171,11 +172,11 @@ function angrySun.onTickEndNPC(v)
 	elseif data.state == 1 then -- Rest in the corner of the screen
 		v.x = v.x + camSpeed.x
 		v.y = v.y + camSpeed.y
-		if (v.x + 0.5 * v.width ~= cam.x + 0.5 * cam.width - 0.4 * cam.width * v.direction) then
-			v.x = math.lerp(v.x + 0.5 * v.width, cam.x + 0.5 * cam.width - 0.4 * cam.width * v.direction, data.timer/140) - v.width * 0.5
+		if (v.x + 0.5 * v.width ~= cam.x + 0.5 * cam.width + (0.5 - cfg.cameraPosition.x) * cam.width * v.direction) then
+			v.x = math.lerp(v.x + 0.5 * v.width, cam.x + 0.5 * cam.width + (0.5 - cfg.cameraPosition.x) * cam.width * v.direction, data.timer/140) - v.width * 0.5
 		end
-		if v.y + 0.5 * v.height ~= cam.y + cam.height * 0.5 - 0.4 * cam.height then
-			v.y = math.lerp(v.y + 0.5 * v.height, cam.y + cam.height * 0.5 - 0.4 * cam.height, data.timer/140) - v.height * 0.5
+		if v.y + 0.5 * v.height ~= cam.y + cam.height * cfg.cameraPosition.y then
+			v.y = math.lerp(v.y + 0.5 * v.height, cam.y + cam.height * cfg.cameraPosition.y, data.timer/140) - v.height * 0.5
 		end
 		data.timer = data.timer + 1
 		if data.isStalling then
@@ -216,25 +217,21 @@ function angrySun.onTickEndNPC(v)
 				data.state = 2
 				if cfg.preSwoopSFX then SFX.play(cfg.preSwoopSFX) end
 				data.lerpStartPos = vector(v.x + 0.5 * v.width, v.y + 0.5 * v.height)
-				data.lerpGoalPos = vector(cam.x + 0.5 * cam.width + 0.4 * cam.width * v.direction, cam.y + cam.height * cfg.swoopDistance)
+				data.lerpGoalPos = vector(cam.x + 0.5 * cam.width - (0.5 - cfg.cameraPosition.x) * cam.width * v.direction, cam.y + cam.height * cfg.swoopDistance)
 			end
 		end
 	elseif data.state == 2 then -- Preparing to swoop down
 		data.lerpStartPos = data.lerpStartPos + camSpeed
 		data.lerpGoalPos = data.lerpGoalPos + camSpeed
-		if (data.lerpStartPos.x ~= cam.x + 0.5 * cam.width - 0.4 * cam.width * v.direction) then
-			data.lerpStartPos.x = math.lerp(data.lerpStartPos.x, cam.x + 0.5 * cam.width - 0.4 * cam.width * v.direction, data.timer/140)
+		if (data.lerpStartPos.x ~= cam.x + 0.5 * cam.width + (0.5 - cfg.cameraPosition.x) * cam.width * v.direction) then
+			data.lerpStartPos.x = math.lerp(data.lerpStartPos.x, cam.x + 0.5 * cam.width + (0.5 - cfg.cameraPosition.x) * cam.width * v.direction, data.timer/140)
 		end
-		if data.lerpStartPos.y ~= cam.y + cam.height * 0.5 - 0.4 * cam.height then
-			v.y = math.lerp(data.lerpStartPos.y, cam.y + cam.height * 0.5 - 0.4 * cam.height, data.timer/140)
+		if data.lerpStartPos.y ~= cam.y + cam.height * cfg.cameraPosition.y then
+			v.y = math.lerp(data.lerpStartPos.y, cam.y + cam.height * cfg.cameraPosition.y, data.timer/140)
 		end
 		data.timer = data.timer + 1
 		v.x = data.lerpStartPos.x + (cfg.horizontalDistance - math.cos(math.rad(data.timer * (6 * cfg.movementSpeed) * v.direction)) * cfg.horizontalDistance) * v.direction - 0.5 * v.width
-		if cfg.invertedMovement then
-			v.y = data.lerpStartPos.y + math.sin(math.rad(data.timer * (6 * cfg.movementSpeed))) * cfg.verticalDistance - 0.5 * v.height
-		else
-			v.y = data.lerpStartPos.y + -math.sin(math.rad(data.timer * (6 * cfg.movementSpeed))) * cfg.verticalDistance - 0.5 * v.height
-		end
+		v.y = data.lerpStartPos.y - math.sin(math.rad(data.timer * (6 * cfg.movementSpeed))) * cfg.verticalDistance - 0.5 * v.height
 		if v.x + 0.5 * v.width == data.lerpStartPos.x then
 			data.loopLaps = data.loopLaps + 1
 			if data.loopLaps >= cfg.loopLaps then
@@ -248,13 +245,13 @@ function angrySun.onTickEndNPC(v)
 		if afterimages and cfg.afterimageTrails then afterimages.create(v, 24, cfg.afterimageColour, true, -49) end
 		data.lerpStartPos = data.lerpStartPos + camSpeed
 		data.lerpGoalPos = data.lerpGoalPos + camSpeed
-		data.lerp = data.lerp + 0.75
+		data.lerp = data.lerp + (0.75 * cfg.swoopSpeed)
 		v.x = data.lerpStartPos.x + (data.lerpGoalPos.x - data.lerpStartPos.x) * easing.inOutQuad(data.lerp * 0.01, 0, 1, 1) - 0.5 * v.width
 		if data.lerp <= 50 then
 			v.y = data.lerpStartPos.y + (data.lerpGoalPos.y - data.lerpStartPos.y) * easing.outQuad(data.lerp * 0.02, 0, 1, 1) - 0.5 * v.height
-			if data.lerp + 0.75 >= 50 then
+			if data.lerp + (0.75 * cfg.swoopSpeed) >= 50 then
 				data.lerpStartPos.y = data.lerpGoalPos.y
-				data.lerpGoalPos.y = cam.y + cam.height * 0.5 - 0.4 * cam.height
+				data.lerpGoalPos.y = cam.y + cam.height * cfg.cameraPosition.y
 			end
 		else
 			v.y = data.lerpStartPos.y + (data.lerpGoalPos.y - data.lerpStartPos.y) * easing.inQuad((data.lerp-50) * 0.02, 0, 1, 1) - 0.5 * v.height
@@ -269,10 +266,10 @@ function angrySun.onTickEndNPC(v)
 	end
 
 	if cfg.spawnSparkles then
-                if RNG.randomInt(1, 15) == 1 then
+                if RNG.randomInt(1, 10) == 1 then
                         local e = Effect.spawn(80, v.x + RNG.randomInt(0, v.width), v.y + RNG.randomInt(0, v.height))
-                        e.speedX = RNG.random(-2, 2)
-                        e.speedY = RNG.random(-2, 2)
+                        e.speedX = RNG.random(-0.25, 0.25)
+                        e.speedY = RNG.random(-0.25, 0.25)
                         e.x = e.x - e.width * 0.5
                         e.y = e.y - e.height * 0.5
                 end
@@ -306,7 +303,7 @@ function angrySun.onTickEndNPC(v)
 	data.animTimer = data.animTimer + 1
 
 	local f = math.floor(data.animTimer/cfg.framespeed) % (cfg.frames - cfg.angryFrames)
-	if (data.state == 2 and cfg.angryWhileSpinning) or data.state == 3 then
+	if (((data.state == 1 and data.isStalling) or data.state == 2) and cfg.angryWhileSpinning) or data.state == 3 then
 		f = (cfg.frames - cfg.angryFrames) + math.floor(data.animTimer/cfg.framespeed) % cfg.angryFrames
 	end
 
