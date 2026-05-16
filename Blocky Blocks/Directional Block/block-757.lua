@@ -169,7 +169,7 @@ function directionalBlock.onCameraDrawBlock(v,camIdx)
 		sourceHeight = v.height,
 		sceneCoords = true,
 		centered = true,
-		priority = priority,
+		priority = -64,
 	}
 
 	blockutils.setBlockFrame(v.id, -1000)
