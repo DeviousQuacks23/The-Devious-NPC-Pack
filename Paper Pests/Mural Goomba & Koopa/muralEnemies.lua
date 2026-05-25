@@ -5,6 +5,8 @@ local muralEnemies = {}
 
 muralEnemies.idMap = {}
 
+muralEnemies.shatterSFX = Misc.resolveSoundFile("muralEnemyShatter.ogg")
+
 function muralEnemies.register(npcID)
 	npcManager.registerEvent(npcID, muralEnemies, "onTickEndNPC")
 	npcManager.registerEvent(npcID, muralEnemies, "onDrawNPC")
@@ -143,8 +145,8 @@ local function createFragments(id,x,y,rotation)
 				id = id,groupIdx = i,
 				x = position.x,y = position.y,
 				rotation = rotation,
-				speedX = RNG.random(-3,3),
-				speedY = RNG.random(0,-7),
+				speedX = RNG.random(-8,8),
+				speedY = RNG.random(-1,-12),
 				frameX = frameX,
 				frameY = frameY,
 			}
@@ -159,12 +161,16 @@ function muralEnemies.onPostNPCKill(v,killReason)
 	local data = v.data
 
 	if killReason ~= HARM_TYPE_OFFSCREEN and killReason ~= HARM_TYPE_LAVA then
-		createFragments(
-			v.id,
-			v.x + (v.width / 2) + config.gfxoffsetx,
-			v.y + (v.height / 2) + config.gfxoffsety,
-			data.rotation or 0
-		)
+		for i=1,RNG.randomInt(1, 5) do
+			createFragments(
+				v.id,
+				v.x + (v.width / 2) + config.gfxoffsetx,
+				v.y + (v.height / 2) + config.gfxoffsety,
+				data.rotation or 0
+			)
+		end
+
+		if muralEnemies.shatterSFX then SFX.play(muralEnemies.shatterSFX) end
 	end
 end
 
