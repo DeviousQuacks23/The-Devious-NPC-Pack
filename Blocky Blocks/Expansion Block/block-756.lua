@@ -54,19 +54,22 @@ function eggspansionBlock.onTickBlock(v)
 	local oldHeight = v.height
 	local oldWidth = v.width
 
+	local raise = v.data._settings.pixelsRaised or 64
+	local speed = (raise/64)
+
 	if data.eggspanded then
 		if data.timer <= 0 then data.eggspanded = false end
-		v:setSize(math.min(64, v.width + 4), math.min(64, v.height + 4))
+		v:setSize(math.min(64, v.width + (4*speed)), math.min(64, v.height + (4*speed)))
 
 		if not data.hasBumped then
-			v:translate(0, math.max((data.spawnY - 72) - v.y, -4))
-			if v.y <= (data.spawnY - 72) then data.hasBumped = true end
+			v:translate(0, math.max((data.spawnY - (raise+8)) - v.y, (-4*speed)))
+			if v.y <= (data.spawnY - (raise+8)) then data.hasBumped = true end
 		else
-			v:translate(0, math.min((data.spawnY - 64) - v.y, 1))
+			v:translate(0, math.min((data.spawnY - raise) - v.y, (1*speed)))
 		end
 	else
-		v:setSize(math.max(32, v.width - 2), math.max(32, v.height - 2))
-		v:translate(0, math.min(data.spawnY - v.y, 2))
+		v:setSize(math.max(32, v.width - (2*speed)), math.max(32, v.height - (2*speed)))
+		v:translate(0, math.min(data.spawnY - v.y, (2*speed)))
 	end
 
 	v:translate(oldWidth / 2 - v.width / 2, oldHeight - v.height)

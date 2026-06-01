@@ -1,0 +1,16 @@
+{
+	"style" : "groupbox",
+	"title" : "Expansion Block Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"name": "pixelsRaised",
+			"title": "Amount of pixels up when expanded?",
+			"type": "int",
+			"value-min": 0,
+			"value-max": 256,
+			"value-default": 64
+		}
+	]
+}
+
