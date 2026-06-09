@@ -272,6 +272,8 @@ function jumpingPiranha.onDrawNPC(v)
 	local data = v.data._basegame
         local config = NPC.config[v.id]
 
+	if not data.scale then return end
+
 	local img = Graphics.sprites.npc[v.id].img
 	local lowPriorityStates = table.map{1,3,4}
 	local priority = (lowPriorityStates[v:mem(0x138,FIELD_WORD)] and -75) or (v:mem(0x12C,FIELD_WORD) > 0 and -30) or (config.foreground and -15) or -45
