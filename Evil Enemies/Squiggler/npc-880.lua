@@ -122,6 +122,18 @@ local function spawnChildren(v)
 	end
 end
 
+-- takes start and makes it get closer to goal, at speed change
+-- taken from SMATRS
+local function approach(start,goal,change)
+    	if start > goal then
+        	return math.max(goal,start - change)
+    	elseif start < goal then
+        	return math.min(goal,start + change)
+    	else
+        	return goal
+    	end
+end
+
 local function setChildPosition(v)
 	local data = v.data._basegame
 	local cfg = NPC.config[v.id]
@@ -132,9 +144,17 @@ local function setChildPosition(v)
 		data.childSpeedX[i] = data.childSpeedX[i - 1]
 		data.childSpeedY[i] = data.childSpeedY[i - 1]
 	end
-	data.childX[1], data.childY[1] = getChildSpawnPosition(v)
-	data.childSpeedX[1] = v.speedX
-	data.childSpeedY[1] = v.speedY
+	local CSX, CSY = getChildSpawnPosition(v)
+
+	if v.data.isFalling then
+		data.childX[1], data.childY[1] = CSX, CSY
+		data.childSpeedX[1] = v.speedX
+		data.childSpeedY[1] = v.speedY
+	else
+		data.childX[1], data.childY[1] = approach(data.childX[1], CSX, 2), approach(data.childY[1], CSY, 2)
+		data.childSpeedX[1] = approach(data.childSpeedX[1], v.speedX, 2)
+		data.childSpeedY[1] = approach(data.childSpeedY[1], v.speedY, 2)
+	end
 end
 
 local function resetChildPosition(v)
