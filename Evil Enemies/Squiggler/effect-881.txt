@@ -2,4 +2,4 @@
 import = AI_WIGGLE
 frames = 1
 framestyle = 1
-speedY = -4:-8
+speedY = -6

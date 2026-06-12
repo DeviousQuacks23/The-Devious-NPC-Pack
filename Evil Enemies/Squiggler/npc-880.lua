@@ -20,7 +20,7 @@ local squigglerSettings = {
 	frames = 1,
 	framestyle = 1,
 	framespeed = 8,
-	speed = 1.25,
+	speed = 1.15,
 	luahandlesspeed = true,
 	nofireball = false,
 	noiceball = false,
@@ -32,7 +32,7 @@ local squigglerSettings = {
 
 	-- Devious is too lazy to change config names
 	littlebooid = npcID + 1,
-	littleboodistance = 9,
+	littleboodistance = 12,
 	littleboooffset = 6,
 	nospecialanimation = false,
 	nospecialrendering = false,
@@ -287,14 +287,6 @@ function squiggler.onTickEndNPC(v)
 	end
 
 	if isBeingGenerated(v) then resetChildPosition(v) end
-
-	-- Squiggler exclusive code: make it wiggle
-
-	data.timer = (data.timer or 0) + 1
-	local s = 6 * math.pi/65
-	v.data.speedMultiplier = 1 + (1.15 * s * math.cos(s * data.timer))
-
-	-- Text.print(v.data.speedMultiplier,0,0)
 end
 
 function squiggler.onDrawNPC(v)
