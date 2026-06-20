@@ -1,4 +1,5 @@
 local blockManager = require("blockManager")
+local blockutils = require("blocks/blockutils")
 local paralx2 = require("paralx2")
 
 -- Editor symbol based on sprites by Smuglutena
@@ -43,9 +44,11 @@ function smokeAndMirrors.onTickBlock(v)
 						if settings.index and settings.index > 0 and settings.index == pathSettings.index then
 							local diff = vector((p.x + p.width/2) - (v.x + v.width/2), (p.y + p.height/2) - (v.y + v.height/2))
 							local i = vector((diff.x/(v.width/2 + p.width/2) + 1)/2, (diff.y/(v.height/2 + p.height/2) + 1)/2)
+							local exitSection = blockutils.getBlockSection(b)
 
 							if settings.doWarpCooldown then p:mem(0x15C, FIELD_WORD, 50) end
 							p:teleport(math.lerp(b.x-p.width, b.x+b.width, i.x), math.lerp(b.y-p.height, b.y+b.height, i.y))
+							if p.section ~= exitSection then p.section = exitSection end
 							if settings.resetSpeed then p.speedX, p.speedY = 0, 0 end
 
 							if settings.affectBG then
