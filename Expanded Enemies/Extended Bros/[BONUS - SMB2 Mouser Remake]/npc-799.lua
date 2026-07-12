@@ -122,9 +122,6 @@ function mrBoombastic.onTickEndNPC(v)
 		data.initialized = true
 		data.health = config.health
 		data.immune = 0
-		data.walkTimerPoll = 0
-		data.throwTimerPoll = 0
-		data.jumpTimerPoll = 0
 		data.directionPoll = -1
 		data.hasSetMusic = data.hasSetMusic or false
 	end
@@ -140,9 +137,9 @@ function mrBoombastic.onTickEndNPC(v)
 	data.immune = math.max(0, data.immune - 1)
 
 	if data.immune > 0 then
-		data.walkTimer = data.walkTimerPoll
-		data.throwTimer = data.throwTimerPoll
-		data.jumpTimer = (data.jumpTimerPoll + 2)
+		data.walkTimer = data.walkTimer + 1
+		data.throwTimer = data.throwTimer + 1
+		data.jumpTimer = data.jumpTimer + 1
 
 		if data.throwingID ~= nil then data.throwingID = nil end
 		v.x = v.x - v.speedX
@@ -151,9 +148,6 @@ function mrBoombastic.onTickEndNPC(v)
 			data.directionPoll = -data.directionPoll
 		end
 	else
-		data.walkTimerPoll = data.walkTimer
-		data.throwTimerPoll = data.throwTimer
-		data.jumpTimerPoll = data.jumpTimer
 		data.directionPoll = data.facingDirection
 	end
 
@@ -168,9 +162,6 @@ function mrBoombastic.onTickEndNPC(v)
 	Text.print(data.walkTimer, 0, 32)
 	Text.print(data.throwTimer, 0, 48)
 	Text.print(data.jumpTimer, 0, 64)
-	Text.print(data.walkTimerPoll, 0, 80)
-	Text.print(data.throwTimerPoll, 0, 96)
-	Text.print(data.jumpTimerPoll, 0, 112)
 	Text.print(data.throwingID, 0, 128)
 	Text.print(data.facingDirection, 0, 144)
 	Text.print(data.directionPoll, 0, 160)
