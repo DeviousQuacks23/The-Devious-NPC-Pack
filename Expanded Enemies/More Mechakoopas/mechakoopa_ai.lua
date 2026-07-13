@@ -422,10 +422,10 @@ function mechakoopa.onTickEndMechakoopa(v)
             end
         elseif data.timer > (config.recoverTime*0.75) and data.timer < (config.recoverTime*0.95) then
 	    if config.shakeWhenRecovering then
-	        if data.timer%4 > 0 and data.timer%4 < 3 then
-		    v.x = v.x + 2
+	        if data.timer%8 > 0 and data.timer%8 < 5 then
+		    v.x = v.x + 1
 	        else
-		    v.x = v.x - 2
+		    v.x = v.x - 1
 	        end
 	    end
         end
@@ -441,6 +441,10 @@ function mechakoopa.onTickEndMechakoopa(v)
             if v.speedX >= -config.deaccelerationGround and v.speedX <= config.deaccelerationGround then
                 v.speedX = 0
             end
+
+            if v.data.oldSpeedY and v.data.oldSpeedY > config.bounceLimit then
+        	v.speedY = -v.data.oldSpeedY * config.bounceLossMod
+	    end
 	else
             if v.speedX > 0 then
                 v.speedX = v.speedX - config.deacceleration
@@ -452,6 +456,8 @@ function mechakoopa.onTickEndMechakoopa(v)
             end
 	end
 
+	v.data.oldSpeedY = v.speedY
+
         -- Get knocked by players
         if v:mem(0x12C,FIELD_WORD) == 0 and v:mem(0x12E,FIELD_WORD) == 0 and not v.isProjectile then -- If not grabbed
             for _,w in ipairs(Player.getIntersecting(v.x,v.y,v.x+v.width,v.y+v.height)) do
@@ -461,10 +467,14 @@ function mechakoopa.onTickEndMechakoopa(v)
                         v.speedY = config.kickSpeedY
                     end
 	 	    v.isProjectile = true
-                    SFX.play(9)
+                    SFX.play(2)
 
 		    if config.animateWhenKicked then
 	 	        data.animationTimer = 0
+		    end
+
+		    if config.resetWhenKicked then
+			data.timer = 0
 		    end
                 end
             end

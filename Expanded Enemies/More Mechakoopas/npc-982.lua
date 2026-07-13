@@ -63,11 +63,15 @@ local mechakoopaSettings = {
 
 	deacceleration = 0.05,
 	deaccelerationGround = 0.35,
+	bounceLimit = 0.5,
+	bounceLossMod = 0.675,
+
 	kickSpeedX = 6,
-	kickSpeedY = -2,
+	kickSpeedY = -1.5,
 
 	shakeWhenRecovering = true,
 	animateWhenKicked = true,
+	resetWhenKicked = true,
 
 	transformID = transformID,     -- The ID of the NPC that the NPC will transform into when hit/recovering.
  	deathEffectID = deathEffectID, -- The ID of the effect spawned when the mechakoopa is killed, or can be nil for none.
