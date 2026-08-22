@@ -15,7 +15,7 @@ coinCounter.hudSettings = {
 	fontScale = 1,
 	maxTextWidth = 52,
 
-	hudLocation = vector(0.065, 0.960),
+	hudLocation = vector(0.080, 0.820),
 	rewardScore = 12,
 }
 
@@ -154,6 +154,9 @@ function coinCounter.onDraw()
 	if totalCoins > 0 then
 		if Misc.coins() ~= oldCoins then
 			local coinsDiff = (Misc.coins() - oldCoins)
+			if coinsDiff < 0 then
+				coinsDiff = coinsDiff + 100 -- added to prevent coin overflow. Thanks R-Gamer for the fix!
+			end
 			totalCoins = totalCoins - coinsDiff
 			oldCoins = Misc.coins()
 
